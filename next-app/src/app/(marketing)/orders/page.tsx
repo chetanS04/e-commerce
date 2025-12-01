@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft, Package, Truck, CheckCircle, Clock, X, Search, Calendar, Filter, AlertTriangle } from "lucide-react";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import { fetchThemes } from "../../../../utils/theme";
 import axios from "../../../../utils/axios";
 import Modal from "@/components/(sheared)/Modal";

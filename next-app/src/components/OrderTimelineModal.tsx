@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { CheckCircle, Package, Truck, Clock, MapPin, Calendar, User, Mail, Phone, Home } from "lucide-react";
 import Modal from "@/components/(sheared)/Modal";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 
 const basePath = process.env.NEXT_PUBLIC_UPLOAD_BASE || "http://localhost:8000";
 

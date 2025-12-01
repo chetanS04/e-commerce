@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import axios from "../../../../../utils/axios";
 import { ProductDetail, ProductVariant } from "@/common/interface";
 import { CheckCircle2, ChevronDown, Layers3, Package, Settings2, Tag, XCircle, ShoppingCart, Plus, Minus, Heart, ShoppingBag } from "lucide-react";

@@ -8,7 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { ArrowLeft, MapPin, CreditCard, CheckCircle2, Package, Minus, Plus, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { placeSingleItemOrder } from "../../../../../utils/orderApi";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import axios from "../../../../../utils/axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

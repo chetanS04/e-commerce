@@ -11,7 +11,7 @@ import { useLoader } from "@/context/LoaderContext";
 import { useAuth } from "@/context/AuthContext";
 import { AxiosError } from "axios";
 import AuthBg from "@/public/AuthBg.png";
-import logo from "@/public/final.png";
+import logo from "@/public/ZeltonHorizontalBlack.png";
 import Link from "next/link";
 import Image from "next/image";
 import { Check, Eye, EyeOff, UserPlus } from "lucide-react";

@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 
 import Link from "next/link";
 import AuthBg from "@/public/AuthBg.png";
-import logo from "@/public/final.png";
+import logo from "@/public/ZeltonHorizontalBlack.png";
 import Image from "next/image";
 import { forgotPassword } from "../../../../utils/auth";
 import { KeyRound, Mail } from "lucide-react";

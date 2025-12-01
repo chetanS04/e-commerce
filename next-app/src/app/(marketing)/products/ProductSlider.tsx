@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import axios from "../../../../utils/axios";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 
 type Product = {
     id: number;

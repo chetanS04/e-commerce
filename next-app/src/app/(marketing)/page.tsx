@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import axios from "../../../utils/axios";
-import BgImage from '@/public/bgImage.jpg';
 import Testimonials from "./Testimonials/page";
 import CategorySlider from "./categories/CategorySlider";
 import ProductSlider from "./products/ProductSlider";
@@ -283,10 +282,9 @@ export default function HomeUI() {
               {sliders.length === 0 && (
                 <div
                   className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(${BgImage.src})`,
-                  }}
-                />
+                >
+                  <p>no image found for slider</p>
+                </div>
               )}
             </div>
 

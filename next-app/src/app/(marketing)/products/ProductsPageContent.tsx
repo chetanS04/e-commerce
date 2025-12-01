@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Search, Filter, X, ChevronLeft, ChevronRight, ChevronDown, Home } from "lucide-react";
 import axios from "../../../../utils/axios";
 import { fetchThemes } from "../../../../utils/theme";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 
 const basePath = process.env.NEXT_PUBLIC_UPLOAD_BASE || "http://localhost:8000";
 

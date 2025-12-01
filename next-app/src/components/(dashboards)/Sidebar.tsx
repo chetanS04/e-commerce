@@ -17,7 +17,8 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
-import logo from "@/public/final.png";
+import logoText from "@/public/ZeltonHorizontalBlack.png";
+import logo from "@/public/ZeltonIconBlack.png";
 import { LiaThListSolid } from "react-icons/lia";
 import { PiListChecksDuotone } from "react-icons/pi";
 
@@ -31,7 +32,7 @@ const navLinks = [
   { href: "/dashboard/sliders", label: "Sliders", icon: Images, roles: ["Admin"] },
   { href: "/dashboard/brands", label: "Brands", icon: Tag, roles: ["Admin"] },
   { href: "/dashboard/attributes", label: "Attributes", icon: Layers, roles: ["Admin"] },
-  // { href: "/dashboard/themes", label: "Themes", icon: Palette, roles: ["Admin"] },
+  { href: "/dashboard/themes", label: "Themes", icon: Palette, roles: ["Admin"] },
 ];
 
 export default function Sidebar() {
@@ -96,11 +97,17 @@ export default function Sidebar() {
       {/* Logo */}
       <div
         className={`flex items-center px-4 py-3 rounded-2xl border border-gray-200 bg-white shadow-sm mt-2 
-          ${isOpen ? "justify-between" : "justify-center"}`}
+    ${isOpen ? "justify-between" : "justify-center"}`}
       >
-        <Link href="/" className={`logo italic font-bold h-[1.5rem] text-4xl text-gray-800`}>
-          <Image src={logo} alt="Logo" className="h-full w-full object-contain" />
+        <Link href="/" className="logo italic font-bold h-[1.5rem] text-4xl text-gray-800 flex items-center">
+          {isOpen ? (
+            <Image src={logoText} alt="Logo Text" className="h-[1.5rem] w-auto object-contain" />
+          ) : (
+            <Image src={logo} alt="Logo Icon" className="h-[2rem] w-auto object-contain" />
+          )}
         </Link>
+
+        {/* Sidebar Collapse Buttons */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="text-gray-600 hover:text-[#ff9903] cursor-pointer focus:outline-none"
@@ -108,6 +115,7 @@ export default function Sidebar() {
           <LiaThListSolid size={20} />
         </button>
       </div>
+
 
       {/* Nav */}
       <nav className="my-2 flex-1 overflow-y-auto scrollHide rounded-2xl border border-gray-200 bg-white p-2 shadow-sm">

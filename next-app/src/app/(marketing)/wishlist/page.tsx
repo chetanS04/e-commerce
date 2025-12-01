@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useLike } from "@/context/LikeContext";
 import { useAuth } from "@/context/AuthContext";
 import { Heart, ShoppingCart, ArrowLeft, Trash2 } from "lucide-react";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import { getUserLikedProducts } from "../../../../utils/likeApi";
 import { fetchThemes } from "../../../../utils/theme";
 

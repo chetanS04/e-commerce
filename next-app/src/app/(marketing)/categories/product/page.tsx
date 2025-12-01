@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import { ProductDetail } from "@/common/interface";
 import { useLoader } from "@/context/LoaderContext";
 import { getSubcategoryProducts } from "../../../../../utils/product";

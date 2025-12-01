@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Search, Eye, Edit, Truck, CheckCircle, Clock, X, Package, Download, Calendar } from "lucide-react";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import axios from "../../../../../utils/axios";
 import Modal from "@/components/(sheared)/Modal";
 import OrderTimelineModal from "@/components/OrderTimelineModal";

@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft, MapPin, CreditCard, CheckCircle2, Package, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { placeOrderFromCart } from "../../../../utils/orderApi";
-import imgPlaceholder from "@/public/1.jpg";
+import imgPlaceholder from "@/public/imagePlaceholder.png";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";

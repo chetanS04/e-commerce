@@ -10,7 +10,7 @@ import SuccessMessage from "@/components/(sheared)/SuccessMessage";
 import { AxiosError } from "axios";
 import Link from "next/link";
 import AuthBg from "@/public/AuthBg.png";
-import logo from "@/public/final.png";
+import logo from "@/public/ZeltonHorizontalBlack.png";
 import Image from "next/image";
 import { verifyEmailCode } from "../../../../utils/auth";
 import { Mail } from "lucide-react";
