@@ -19,7 +19,7 @@ class EmailVerificationCode extends Mailable
 
     public function build()
     {
-        return $this->subject('Your Pooja Box Verification Code')
+        return $this->subject('Your Zelton Verification Code')
             ->view('emails.verification-code-plain')
             ->with(['code' => $this->code]);
     }

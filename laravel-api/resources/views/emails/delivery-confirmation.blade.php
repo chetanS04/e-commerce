@@ -94,13 +94,13 @@
         
         <p>Thank you for shopping with us! We appreciate your business.</p>
         
-        <p>Best regards,<br>The E-Commerce Team</p>
+        <p>Best regards,<br>The Zelton Team</p>
     </div>
     
     <div class="footer">
         <p>This is an automated email. Please do not reply to this message.</p>
-        <p>If you have any questions, contact us at support@yourstore.com</p>
-        <p>&copy; {{ date('Y') }} Your E-Commerce Store. All rights reserved.</p>
+        <p>If you have any questions, contact us at support@zelton.com</p>
+        <p>&copy; {{ date('Y') }} Zelton. All rights reserved.</p>
     </div>
 </body>
 </html>

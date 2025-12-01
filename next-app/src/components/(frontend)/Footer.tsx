@@ -11,11 +11,11 @@ const Footer = () => {
                             {/* <a href="#">
                                 <Image src={logo} alt="logo" className="w-48" />
                             </a> */}
-                            <h2 className='text-white text-[5vh]  font-extrabold italic' >Pooja Box</h2>
+                            <h2 className='text-white text-[5vh]  font-extrabold italic' >Zelton</h2>
                             <p className='text-white lg:text-base text-sm mt-5'>
                                 Your trusted hub for gaming account trading.
                                 Fast, secure, and hassle-free deals.
-                                Play smarter, trade safer – only on Pooja Box. </p>
+                                Play smarter, trade safer – only on Zelton. </p>
                         </div>
 
                         <div className="">

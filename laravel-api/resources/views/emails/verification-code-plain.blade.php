@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Verification Code – Pooja Box</title>
+    <title>Verification Code – Zelton</title>
     <meta charset="UTF-8">
     <style>
         body {
@@ -89,13 +89,13 @@
     <div class="container">
         <div class="brand-header">
             <!-- Logo stored in public/logo.png -->
-            <img class="brand-logo" src="{{ $message->embed(public_path() . '/logo.png') }}" alt="Pooja Box Logo">
-            <div class="brand-name">Pooja Box</div>
+            <img class="brand-logo" src="{{ $message->embed(public_path() . '/logo.png') }}" alt="Zelton Logo">
+            <div class="brand-name">Zelton</div>
         </div>
 
         <div class="title">Your Verification Code</div>
 
-        <p>Please use the code below to complete your verification process on <b>Pooja Box</b>.</p>
+        <p>Please use the code below to complete your verification process on <b>Zelton</b>.</p>
 
         <div class="code-box">
             {{ $code }}
@@ -105,7 +105,7 @@
 
         <div class="footer">
             If you did not request this code, please ignore this message.<br>
-            <b>The Pooja Box Team</b>
+            <b>The Zelton Team</b>
         </div>
     </div>
 </body>

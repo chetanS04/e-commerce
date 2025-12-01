@@ -94,7 +94,7 @@ export default function LoginPage() {
           {logo && <Image src={logo} alt="logo" className="w-28 mx-auto mb-3" />}
           <h1 className="text-gray-800 font-extrabold text-3xl flex justify-center items-center gap-2">
             <LogIn className="text-orange-500" />
-            Login to <span className="text-orange-500">Pooja E-Com</span>
+            Login to <span className="text-orange-500">Zelton</span>
           </h1>
           <p className="text-gray-500 text-sm mt-2">Welcome back! Please enter your details.</p>
         </div>

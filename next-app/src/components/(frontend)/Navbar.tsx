@@ -340,7 +340,7 @@ const Navbar = () => {
                 }}
                 className="font-bold text-2xl"
               >
-                Pooja Box
+                Zelton
               </span>
             </div>
           </Link>
@@ -745,7 +745,7 @@ const Navbar = () => {
                         }} className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
                           <RiUserLine className="text-2xl text-white" />
                         </div>
-                        <h3 className="font-semibold text-gray-900">Welcome to Pooja Box</h3>
+                        <h3 className="font-semibold text-gray-900">Welcome to Zelton</h3>
                         <p className="text-sm text-gray-500 mt-1">Sign in to access your account</p>
                       </div>
                       <div className="space-y-3">

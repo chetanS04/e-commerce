@@ -124,7 +124,7 @@ export default function Home() {
             Create Account
           </h1>
           <p className="text-gray-500 text-sm mt-2">
-            Join <span className="text-orange-500 font-semibold">Pooja E-Com</span> and start shopping today!
+            Join <span className="text-orange-500 font-semibold">Zelton</span> and start shopping today!
           </p>
         </div>
 

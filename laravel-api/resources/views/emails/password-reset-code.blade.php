@@ -15,7 +15,7 @@
     <p>This code will expire in 15 minutes.</p>
     <p>If you did not request a password reset, you can ignore this email.</p>
 
-    <p>Thanks,<br>Pooja Box Team</p>
+    <p>Thanks,<br>Zelton Team</p>
 </body>
 
 </html>
