@@ -724,7 +724,7 @@ const OrdersPage = () => {
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-gray-600">Payment:</span>
-                                        <span className="font-medium text-gray-700">{selectedOrder.payment_method}</span>
+                                        <span className="font-medium text-gray-700">{selectedOrder.payment_method === 'cash_on_delivery' ? 'Cash on Delivery' : 'Online Payment'}</span>
                                     </div>
                                 </div>
                             </div>
