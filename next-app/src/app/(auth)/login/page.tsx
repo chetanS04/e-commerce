@@ -10,7 +10,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { AxiosError } from "axios";
 import Link from "next/link";
-import AuthBg from "@/public/AuthBg.png";
 import logo from "@/public/ZeltonHorizontalBlack.png";
 import Image from "next/image";
 import { Check, Eye, EyeOff, LogIn } from "lucide-react";

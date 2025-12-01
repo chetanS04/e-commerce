@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-
 import Link from "next/link";
-import AuthBg from "@/public/AuthBg.png";
 import logo from "@/public/ZeltonHorizontalBlack.png";
 import Image from "next/image";
 import { resetPassword } from "../../../../utils/auth";

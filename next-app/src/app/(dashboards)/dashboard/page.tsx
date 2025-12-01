@@ -5,7 +5,7 @@ import ProtectedRoute from "@/components/(sheared)/ProtectedRoute";
 export default function DashboardPage() {
   return (
     <ProtectedRoute role="Admin">
-      <div className="p-10 text-center font-semibold text-gray-700 text-xl space-y-6 border-t border-black/10 mt-14">
+      <div className="p-10 text-center font-semibold text-gray-700 text-xl space-y-6">
 
         {/* Dashboard Section */}
         <div x-show="activeSection === 'dashboard'" className="space-y-6">
@@ -15,7 +15,6 @@ export default function DashboardPage() {
               <h2 className="text-lg font-semibold text-gray-700">Total Users</h2>
               <p className="text-2xl font-bold text-green-600">12</p>
             </div>
-
 
             <div className="bg-white p-4 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.15)]">
               <h2 className="text-lg font-semibold text-gray-700">Pending Orders</h2>

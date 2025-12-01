@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaTelegram, FaWhatsapp } from 'react-icons/fa'
 import Link from 'next/link'
+
 const Footer = () => {
     return (
         <>

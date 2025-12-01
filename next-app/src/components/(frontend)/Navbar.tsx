@@ -14,7 +14,6 @@ import {
   RiHeartLine,
   RiPhoneLine,
   RiMailLine,
-  RiMapPinLine,
   RiStarFill,
   RiShieldCheckLine,
   RiLoaderLine
@@ -23,7 +22,7 @@ import { TbLayoutDashboardFilled } from 'react-icons/tb';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useLike } from '@/context/LikeContext';
-import logo from '@/public/final.png';
+import logoText from '@/public/ZeltonHorizontalBlack.png';
 import axios from '../../../utils/axios';
 import {
   fetchThemes,
@@ -321,13 +320,6 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
-              {/* <Image
-                src={logo}
-                alt="Logo"
-                width={48}
-                height={48}
-                className="transition-transform duration-300 group-hover:scale-110"
-              /> */}
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 opacity-0 group-hover:opacity-20 rounded-full transition-opacity duration-300"></div>
             </div>
             <div className="flex flex-col">
@@ -340,7 +332,7 @@ const Navbar = () => {
                 }}
                 className="font-bold text-2xl"
               >
-                Zelton
+                <Image src={logoText} alt="Zelton Logo" className="h-8 w-auto object-contain" />
               </span>
             </div>
           </Link>
