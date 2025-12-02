@@ -396,7 +396,7 @@ class OrderController extends Controller
                 $confirmationUrl = $frontendUrl . '/confirm-delivery/' . $token;
 
                 try {
-                    // Mail::to($order->user->email)->send(new DeliveryConfirmationMail($order, $confirmationUrl));
+                    Mail::to($order->user->email)->send(new DeliveryConfirmationMail($order, $confirmationUrl));
                     Log::info('Delivery confirmation email sent successfully to: ' . $order->user->email);
                 } catch (\Exception $mailError) {
                     Log::error('Failed to send delivery confirmation email: ' . $mailError->getMessage());

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Script from 'next/script';
 import axios from "../../../../utils/axios";
@@ -70,7 +70,7 @@ const shippingSchema = yup.object({
         .required("Country is required"),
 }).required();
 
-const CheckoutPage = () => {
+function CheckoutPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user, loading: authLoading } = useAuth();
@@ -978,6 +978,19 @@ const CheckoutPage = () => {
             </Modal>
         </div>
     );
-};
+}
 
-export default CheckoutPage;
+export default function CheckoutPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading checkout...</p>
+                </div>
+            </div>
+        }>
+            <CheckoutPageContent />
+        </Suspense>
+    );
+}

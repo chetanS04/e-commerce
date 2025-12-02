@@ -46,7 +46,7 @@ class TestEmail extends Command
             $this->info("Confirmation URL: {$confirmationUrl}");
             $this->info("Sending email...");
             
-            // Mail::to($order->user->email)->send(new DeliveryConfirmationMail($order, $confirmationUrl));
+            Mail::to($order->user->email)->send(new DeliveryConfirmationMail($order, $confirmationUrl));
             
             $this->info('✓ Email sent successfully!');
             $this->info('Check your email inbox at: ' . $order->user->email);

@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import axios from "../../../../../../utils/axios";
 import { ChevronLeft, ChevronRight, Search, Grid3X3 } from "lucide-react";
-import ProductShow from "../../product/page";
+import ProductShow from "@/components/ProductShow";
 import Modal from "../../../../../components/(sheared)/Modal";
 
 type SubCategory = {

@@ -157,17 +157,6 @@ const ProductsPage = () => {
         fetchProducts();
     };
 
-    const handleCategoryChange = (categoryId: number | null) => {
-        setSelectedCategory(categoryId);
-        setSelectedSubcategory(null);
-        setCurrentPage(1);
-    };
-
-    const handleSubcategoryChange = (subcategoryId: number | null) => {
-        setSelectedSubcategory(subcategoryId);
-        setCurrentPage(1);
-    };
-
     const clearFilters = () => {
         setSearchQuery('');
         setSelectedCategory(null);

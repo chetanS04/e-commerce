@@ -11,22 +11,31 @@ import { TextCursor, Info } from "lucide-react";
 const MAX_FILE_SIZE = 8 * 1024 * 1024;
 const SUPPORTED_FORMATS = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/avif"];
 
+export type FormData = {
+    name: string;
+    description?: string | null;
+    image?: any;
+    secondary_image?: any;
+    link?: string | null;
+    status: boolean;
+};
+
 const schema = yup.object({
     name: yup.string().required("Name is required").min(2).max(50),
-    description: yup.string().nullable().max(300),
+    description: yup.string().nullable().optional().max(300),
     image: yup
         .mixed()
+        .optional()
         .test("fileSize", "Image must be less than 8MB.", (file) => !file || typeof file === "string" || (file instanceof File && file.size <= MAX_FILE_SIZE))
         .test("fileType", "Unsupported format", (file) => !file || typeof file === "string" || (file instanceof File && SUPPORTED_FORMATS.includes(file.type))),
     secondary_image: yup
         .mixed()
+        .optional()
         .test("fileSize", "Secondary image must be less than 8MB.", (file) => !file || typeof file === "string" || (file instanceof File && file.size <= MAX_FILE_SIZE))
         .test("fileType", "Unsupported format", (file) => !file || typeof file === "string" || (file instanceof File && SUPPORTED_FORMATS.includes(file.type))),
-    link: yup.string().nullable().max(300),
+    link: yup.string().nullable().optional().max(300),
     status: yup.boolean().required(),
-}).required();
-
-export type FormData = yup.InferType<typeof schema>;
+});
 
 type InitialData = {
     id: number;
@@ -77,7 +86,7 @@ export default function CommonForm({
         setValue,
         formState: { errors, isValid },
     } = useForm<FormData>({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schema) as any,
         mode: "onChange",
         defaultValues: {
             name: "",
@@ -209,7 +218,7 @@ export default function CommonForm({
                         }}
                         className="w-full py-3 px-5 rounded-2xl border file:mr-4 file:py-2 file:px-4 file:border-0 file:rounded-lg file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
                     />
-                    {errors.image && <p className="text-xs text-red-500">{errors.image.message}</p>}
+                    {errors.image && <p className="text-xs text-red-500">{String(errors.image.message || '')}</p>}
                     {previewImage && <Image src={previewImage} width={600} height={600} alt="Image Preview" className="mt-2 h-24 w-24 rounded object-cover border" />}
                 </div>
 
@@ -236,7 +245,7 @@ export default function CommonForm({
                         }}
                         className="w-full py-3 px-5 rounded-2xl border file:mr-4 file:py-2 file:px-4 file:border-0 file:rounded-lg file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
                     />
-                    {errors.secondary_image && <p className="text-xs text-red-500">{errors.secondary_image.message}</p>}
+                    {errors.secondary_image && <p className="text-xs text-red-500">{String(errors.secondary_image.message || '')}</p>}
                     {previewSecondary && <Image src={previewSecondary} width={1600} height={600} alt="Secondary Preview" className="mt-2 h-24 w-64 rounded object-cover border" />}
                 </div>
 
