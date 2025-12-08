@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, Plus, Filter } from 'lucide-react';
+import { ChevronDown, Plus, Filter, Shield } from 'lucide-react';
 import StarRating from '../ui/StarRating';
 import ReviewCard from './ReviewCard';
 import ReviewForm from './ReviewForm';
@@ -43,6 +43,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
     const [showFilters, setShowFilters] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [reviewToDelete, setReviewToDelete] = useState<Review | null>(null);
+    const [displayedReviewCount, setDisplayedReviewCount] = useState(8);
 
     // Filters and Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -105,6 +106,18 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
     useEffect(() => {
         fetchUserReview();
     }, [productId, user]);
+
+    // Listen for openReviewModal event
+    useEffect(() => {
+        const handleOpenReviewModal = () => {
+            setShowReviewForm(true);
+        };
+
+        window.addEventListener('openReviewModal', handleOpenReviewModal);
+        return () => {
+            window.removeEventListener('openReviewModal', handleOpenReviewModal);
+        };
+    }, []);
 
     // Handlers
     const handleCreateReview = async (data: CreateReviewData) => {
@@ -194,62 +207,45 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6">
             {/* Reviews Header */}
-            <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900">Reviews & Ratings</h2>
-
-                {user && !userReview && !showReviewForm && (
-                    <button
-                        onClick={() => setShowReviewForm(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-semibold transition-colors"
-                    >
-                        <Plus className="w-5 h-5" />
-                        Write a Review
-                    </button>
-                )}
+            <div className="flex items-center justify-between border-b pb-4">
+                <h2 className="text-xl font-semibold text-gray-900">Customer Reviews & Ratings</h2>
             </div>
 
-            {/* Rating Summary and Review Form */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-1">
-                    {/* <RatingSummary
+            {/* Rating Summary and User Review Display */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                {/* <div className="lg:col-span-1">
+                    <RatingSummary
                         summary={summary}
                         onRatingFilter={setRatingFilter}
                         selectedRating={ratingFilter}
-                    /> */}
-                </div>
+                    />
+                </div> */}
 
-                <div className="lg:col-span-2">
-                    {showReviewForm && (
-                        <ReviewForm
-                            productId={productId}
-                            initialData={editingReview ? {
-                                rating: editingReview.rating,
-                                title: editingReview.title || '',
-                                review_text: editingReview.review_text || ''
-                            } : undefined}
-                            isEditing={!!editingReview}
-                            onSubmit={handleFormSubmit}
-                            onCancel={handleCancelForm}
-                            loading={loading}
-                        />
-                    )}
-
-                    {/* User's Review Display */}
-                    {userReview && !showReviewForm && (
-                        <div className="mb-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-3">Your Review</h3>
-                            <ReviewCard
-                                review={userReview}
-                                currentUserId={user?.id}
-                                onEdit={handleEditReview}
-                                onDelete={handleDeleteReview}
-                            />
-                        </div>
-                    )}
-                </div>
             </div>
+
+            {/* Review Form Modal */}
+            {showReviewForm && (
+                <Modal
+                    isOpen={showReviewForm}
+                    onClose={handleCancelForm}
+                    title={editingReview ? "Edit Your Review" : "Write a Review"}
+                >
+                    <ReviewForm
+                        productId={productId}
+                        initialData={editingReview ? {
+                            rating: editingReview.rating,
+                            title: editingReview.title || '',
+                            review_text: editingReview.review_text || ''
+                        } : undefined}
+                        isEditing={!!editingReview}
+                        onSubmit={handleFormSubmit}
+                        onCancel={handleCancelForm}
+                        loading={loading}
+                    />
+                </Modal>
+            )}
 
             {/* Reviews Section */}
             {summary.total_reviews > 0 && (
@@ -279,26 +275,46 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
                     </div>
 
                     {/* Reviews List */}
-                    <div className="space-y-6">
-                        {reviews.map((review) => (
-                            <ReviewCard
-                                key={review.id}
-                                review={review}
-                                currentUserId={user?.id}
-                                onEdit={review.user_id === user?.id ? handleEditReview : undefined}
-                                onDelete={review.user_id === user?.id ? handleDeleteReview : undefined}
-                                onToggleHelpful={review.user_id !== user?.id ? handleToggleHelpful : undefined}
-                            />
+                    <div className="bg-white border border-gray-200 rounded-lg">
+                        {reviews.slice(0, displayedReviewCount).map((review, index) => (
+                            <div key={review.id} className={index !== 0 ? 'border-t border-gray-200' : ''}>
+                                <ReviewCard
+                                    review={review}
+                                    currentUserId={user?.id}
+                                    onEdit={review.user_id === user?.id ? handleEditReview : undefined}
+                                    onDelete={review.user_id === user?.id ? handleDeleteReview : undefined}
+                                    onToggleHelpful={review.user_id !== user?.id ? handleToggleHelpful : undefined}
+                                />
+                            </div>
                         ))}
                     </div>
 
-                    {/* Load More Button */}
-                    {currentPage < totalPages && (
-                        <div className="text-center">
+                    {/* Load More Reviews Button */}
+                    {reviews.length > displayedReviewCount && (
+                        <div className="text-center mt-6">
+                            <button
+                                onClick={() => {
+                                    if (displayedReviewCount >= reviews.length && currentPage < totalPages) {
+                                        handleLoadMore();
+                                    } else {
+                                        setDisplayedReviewCount(prev => prev + 8);
+                                    }
+                                }}
+                                disabled={loading}
+                                className="px-6 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                            >
+                                {loading ? 'Loading...' : `See More Reviews (${reviews.length - displayedReviewCount} more)`}
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Load More from API when all displayed reviews are shown */}
+                    {displayedReviewCount >= reviews.length && currentPage < totalPages && (
+                        <div className="text-center mt-6">
                             <button
                                 onClick={handleLoadMore}
                                 disabled={loading}
-                                className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="px-6 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                             >
                                 {loading ? 'Loading...' : 'Load More Reviews'}
                             </button>

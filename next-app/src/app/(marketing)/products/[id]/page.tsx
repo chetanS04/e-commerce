@@ -40,6 +40,7 @@ const ProductPage = () => {
     const [isUpdatingRating, setIsUpdatingRating] = useState(false);
     const [similarProducts, setSimilarProducts] = useState<ProductDetail[]>([]);
     const [loadingSimilar, setLoadingSimilar] = useState(false);
+    const [displayedSimilarCount, setDisplayedSimilarCount] = useState(10);
 
     const { addToCart, loading: cartLoading } = useCart();
     const { user } = useAuth();
@@ -811,17 +812,52 @@ const ProductPage = () => {
                 )}
 
 
-                {/* Reviews Section */}
-                <div className="mb-8 mt-6">
-                    <ProductReviews
-                        productId={product.id}
-                        onRatingUpdate={() => {
-                            // Trigger live rating update when reviews change with loading animation
-                            fetchLiveRatingSummary(true);
-                            // Dispatch custom event for other components
-                            window.dispatchEvent(new CustomEvent('reviewUpdated', { detail: { productId: product.id } }));
-                        }}
-                    />
+
+
+                {/* Write Review Section */}
+                <div className="mt-8 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-lg p-6">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                            {(liveRatingSummary || product.rating_summary) && (
+                                <div className="flex items-center gap-3">
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-gray-900">
+                                            {((liveRatingSummary || product.rating_summary)?.average_rating || 0).toFixed(1)}
+                                        </div>
+                                        <div className="flex items-center justify-center gap-1 text-yellow-500 text-sm">
+                                            {Array.from({ length: 5 }, (_, i) => (
+                                                <span key={i}>
+                                                    {i < Math.round((liveRatingSummary || product.rating_summary)?.average_rating || 0) ? '★' : '☆'}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <p className="text-xs text-gray-600 mt-1">
+                                            {((liveRatingSummary || product.rating_summary)?.total_reviews || 0).toLocaleString()} ratings
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="h-12 w-px bg-orange-300"></div>
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900">Rate this product</h3>
+                                <p className="text-sm text-gray-600">Share your thoughts with other customers</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => {
+                                if (!user) {
+                                    router.push('/login');
+                                    return;
+                                }
+                                // Open review modal - will be handled by ProductReviews component
+                                window.dispatchEvent(new CustomEvent('openReviewModal'));
+                            }}
+                            className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg flex items-center gap-2 whitespace-nowrap"
+                        >
+                            <Plus className="w-5 h-5" />
+                            Write a Review
+                        </button>
+                    </div>
                 </div>
 
                 {/* Similar Products Section */}
@@ -835,7 +871,7 @@ const ProductPage = () => {
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                            {similarProducts.map((prod) => {
+                            {similarProducts.slice(0, displayedSimilarCount).map((prod) => {
                                 const lowestPrice = prod.variants && prod.variants.length > 0
                                     ? Math.min(...prod.variants.map(v => Number(v.sp)))
                                     : 0;
@@ -915,8 +951,31 @@ const ProductPage = () => {
                                 <div className="w-8 h-8 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mx-auto"></div>
                             </div>
                         )}
+
+                        {/* Load More Similar Products Button */}
+                        {!loadingSimilar && similarProducts.length > displayedSimilarCount && (
+                            <div className="text-center mt-8">
+                                <button
+                                    onClick={() => setDisplayedSimilarCount(prev => prev + 10)}
+                                    className="px-6 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg font-medium transition-colors text-sm"
+                                >
+                                    Load More Products ({similarProducts.length - displayedSimilarCount} remaining)
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
+
+                {/* Reviews Section - Below Similar Products */}
+                <div className="mt-12">
+                    <ProductReviews
+                        productId={product.id}
+                        onRatingUpdate={() => {
+                            fetchLiveRatingSummary(true);
+                            window.dispatchEvent(new CustomEvent('reviewUpdated', { detail: { productId: product.id } }));
+                        }}
+                    />
+                </div>
             </div>
         </div>
     );
