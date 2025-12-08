@@ -487,30 +487,37 @@ class ProductController extends Controller
         }
     }
 
-    public function getSimilarProducts($productId)
+    public function getSimilarProducts(Request $request, $productId)
     {
         try {
             $product = Product::findOrFail($productId);
+            $page = $request->input('page', 1);
+            $perPage = $request->input('per_page', 10);
             
             // Get similar products based on category and subcategory
-            $similarProducts = Product::with(['category', 'brand', 'variants'])
+            $query = Product::with(['category', 'brand', 'variants'])
                 ->where('id', '!=', $productId)
                 ->where('category_id', $product->category_id)
-                ->active()
-                ->limit(12)
-                ->get();
+                ->active();
+
+            $totalCount = $query->count();
 
             // If no products found in same category, get from parent category
-            if ($similarProducts->isEmpty() && $product->category && $product->category->parent_id) {
-                $similarProducts = Product::with(['category', 'brand', 'variants'])
+            if ($totalCount === 0 && $product->category && $product->category->parent_id) {
+                $query = Product::with(['category', 'brand', 'variants'])
                     ->where('id', '!=', $productId)
-                    ->whereHas('category', function ($query) use ($product) {
-                        $query->where('parent_id', $product->category->parent_id);
+                    ->whereHas('category', function ($q) use ($product) {
+                        $q->where('parent_id', $product->category->parent_id);
                     })
-                    ->active()
-                    ->limit(12)
-                    ->get();
+                    ->active();
+                    
+                $totalCount = $query->count();
             }
+
+            $similarProducts = $query
+                ->skip(($page - 1) * $perPage)
+                ->take($perPage)
+                ->get();
 
             $similarProducts->transform(function ($prod) {
                 if (empty($prod->image_url) && $prod->variants->isNotEmpty()) {
@@ -524,9 +531,16 @@ class ProductController extends Controller
             });
 
             return response()->json([
-                'res'       => 'success',
-                'message'   => 'Similar products fetched successfully.',
-                'products'  => $similarProducts,
+                'res'         => 'success',
+                'message'     => 'Similar products fetched successfully.',
+                'products'    => $similarProducts,
+                'pagination'  => [
+                    'current_page' => (int) $page,
+                    'per_page'     => (int) $perPage,
+                    'total'        => $totalCount,
+                    'last_page'    => ceil($totalCount / $perPage),
+                    'has_more'     => $page < ceil($totalCount / $perPage),
+                ],
             ]);
         } catch (\Exception $e) {
             return response()->json([

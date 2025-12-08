@@ -40,7 +40,11 @@ const ProductPage = () => {
     const [isUpdatingRating, setIsUpdatingRating] = useState(false);
     const [similarProducts, setSimilarProducts] = useState<ProductDetail[]>([]);
     const [loadingSimilar, setLoadingSimilar] = useState(false);
-    const [displayedSimilarCount, setDisplayedSimilarCount] = useState(10);
+    const [similarPagination, setSimilarPagination] = useState({
+        current_page: 1,
+        has_more: false,
+        total: 0
+    });
 
     const { addToCart, loading: cartLoading } = useCart();
     const { user } = useAuth();
@@ -121,23 +125,36 @@ const ProductPage = () => {
         fetchProduct();
     }, [id]);
 
-    const fetchSimilarProducts = async (productId: number) => {
+    const fetchSimilarProducts = async (productId: number, page: number = 1) => {
         setLoadingSimilar(true);
         try {
-            const products = await getSimilarProducts(productId);
-            const processedProducts = products.map((prod) => ({
+            const response = await getSimilarProducts(productId, page, 10);
+            const processedProducts = response.products.map((prod: ProductDetail) => ({
                 ...prod,
                 image_url: prod.image_url ? `${baseUrl}${prod.image_url}` : null,
-                variants: prod.variants?.map((v) => ({
+                variants: prod.variants?.map((v: ProductVariant) => ({
                     ...v,
                     image_url: v.image_url ? `${baseUrl}${v.image_url}` : null,
                 })) || [],
             }));
-            setSimilarProducts(processedProducts);
+            
+            if (page === 1) {
+                setSimilarProducts(processedProducts);
+            } else {
+                setSimilarProducts(prev => [...prev, ...processedProducts]);
+            }
+            
+            setSimilarPagination(response.pagination);
         } catch (error) {
             console.error('Error fetching similar products:', error);
         } finally {
             setLoadingSimilar(false);
+        }
+    };
+
+    const loadMoreSimilarProducts = () => {
+        if (similarPagination.has_more && !loadingSimilar) {
+            fetchSimilarProducts(product!.id, similarPagination.current_page + 1);
         }
     };
 
@@ -811,9 +828,6 @@ const ProductPage = () => {
                     </div>
                 )}
 
-
-
-
                 {/* Write Review Section */}
                 <div className="mt-8 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-lg p-6">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -871,7 +885,7 @@ const ProductPage = () => {
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                            {similarProducts.slice(0, displayedSimilarCount).map((prod) => {
+                            {similarProducts.map((prod) => {
                                 const lowestPrice = prod.variants && prod.variants.length > 0
                                     ? Math.min(...prod.variants.map(v => Number(v.sp)))
                                     : 0;
@@ -953,13 +967,21 @@ const ProductPage = () => {
                         )}
 
                         {/* Load More Similar Products Button */}
-                        {!loadingSimilar && similarProducts.length > displayedSimilarCount && (
+                        {similarPagination.has_more && (
                             <div className="text-center mt-8">
                                 <button
-                                    onClick={() => setDisplayedSimilarCount(prev => prev + 10)}
-                                    className="px-6 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg font-medium transition-colors text-sm"
+                                    onClick={loadMoreSimilarProducts}
+                                    disabled={loadingSimilar}
+                                    className="px-6 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg font-medium transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Load More Products ({similarProducts.length - displayedSimilarCount} remaining)
+                                    {loadingSimilar ? (
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                                            Loading...
+                                        </div>
+                                    ) : (
+                                        `Load More Products`
+                                    )}
                                 </button>
                             </div>
                         )}

@@ -43,11 +43,11 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
     const [showFilters, setShowFilters] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [reviewToDelete, setReviewToDelete] = useState<Review | null>(null);
-    const [displayedReviewCount, setDisplayedReviewCount] = useState(8);
 
     // Filters and Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
     const [sortBy, setSortBy] = useState<SortOption>('newest');
     const [ratingFilter, setRatingFilter] = useState<number | null>(null);
 
@@ -65,7 +65,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
         try {
             const response = await getProductReviews(productId, {
                 page,
-                per_page: 10,
+                per_page: 8,
                 sort_by: sortBy,
                 ...(ratingFilter && { rating: ratingFilter })
             });
@@ -79,6 +79,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
             setSummary(response.summary);
             setCurrentPage(response.reviews.current_page);
             setTotalPages(response.reviews.last_page);
+            setHasMore(response.reviews.current_page < response.reviews.last_page);
         } catch (error) {
             console.error('Error fetching reviews:', error);
         } finally {
@@ -275,42 +276,22 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
                     </div>
 
                     {/* Reviews List */}
-                    <div className="bg-white border border-gray-200 rounded-lg">
-                        {reviews.slice(0, displayedReviewCount).map((review, index) => (
-                            <div key={review.id} className={index !== 0 ? 'border-t border-gray-200' : ''}>
-                                <ReviewCard
-                                    review={review}
-                                    currentUserId={user?.id}
-                                    onEdit={review.user_id === user?.id ? handleEditReview : undefined}
-                                    onDelete={review.user_id === user?.id ? handleDeleteReview : undefined}
-                                    onToggleHelpful={review.user_id !== user?.id ? handleToggleHelpful : undefined}
-                                />
-                            </div>
+                    <div className="bg-white border border-gray-200 rounded-lg divide-y divide-gray-200">
+                        {reviews.map((review) => (
+                            <ReviewCard
+                                key={review.id}
+                                review={review}
+                                currentUserId={user?.id}
+                                onEdit={review.user_id === user?.id ? handleEditReview : undefined}
+                                onDelete={review.user_id === user?.id ? handleDeleteReview : undefined}
+                                onToggleHelpful={review.user_id !== user?.id ? handleToggleHelpful : undefined}
+                            />
                         ))}
                     </div>
 
                     {/* Load More Reviews Button */}
-                    {reviews.length > displayedReviewCount && (
-                        <div className="text-center mt-6">
-                            <button
-                                onClick={() => {
-                                    if (displayedReviewCount >= reviews.length && currentPage < totalPages) {
-                                        handleLoadMore();
-                                    } else {
-                                        setDisplayedReviewCount(prev => prev + 8);
-                                    }
-                                }}
-                                disabled={loading}
-                                className="px-6 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                            >
-                                {loading ? 'Loading...' : `See More Reviews (${reviews.length - displayedReviewCount} more)`}
-                            </button>
-                        </div>
-                    )}
-
-                    {/* Load More from API when all displayed reviews are shown */}
-                    {displayedReviewCount >= reviews.length && currentPage < totalPages && (
-                        <div className="text-center mt-6">
+                    {hasMore && (
+                        <div className="text-center">
                             <button
                                 onClick={handleLoadMore}
                                 disabled={loading}
