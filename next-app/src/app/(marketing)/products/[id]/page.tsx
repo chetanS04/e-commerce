@@ -810,68 +810,6 @@ const ProductPage = () => {
                     </div>
                 )}
 
-                {/* Similar Products Section */}
-                {similarProducts.length > 0 && (
-                    <div className="mt-12">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                                <Layers3 className="w-6 h-6 text-orange-500" />
-                                Similar Products
-                            </h2>
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                            {similarProducts.map((prod) => {
-                                const lowestPrice = prod.variants && prod.variants.length > 0
-                                    ? Math.min(...prod.variants.map(v => Number(v.sp)))
-                                    : 0;
-
-                                return (
-                                    <div
-                                        key={prod.id}
-                                        onClick={() => router.push(`/products/${prod.id}`)}
-                                        className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group"
-                                    >
-                                        <div className="relative aspect-square overflow-hidden">
-                                            <Image
-                                                src={prod.image_url || imgPlaceholder.src}
-                                                alt={prod.name}
-                                                fill
-                                                className="object-cover group-hover:scale-110 transition-transform duration-300"
-                                            />
-                                        </div>
-                                        <div className="p-3">
-                                            <h3 className="font-semibold text-sm text-gray-900 line-clamp-2 mb-1 group-hover:text-orange-600 transition-colors">
-                                                {prod.name}
-                                            </h3>
-                                            {prod.rating_summary && prod.rating_summary.total_reviews > 0 && (
-                                                <div className="mb-1">
-                                                    <ProductRatingDisplay
-                                                        averageRating={prod.rating_summary.average_rating}
-                                                        reviewCount={prod.rating_summary.total_reviews}
-                                                        size="sm"
-                                                        showCount={false}
-                                                    />
-                                                </div>
-                                            )}
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-orange-600 font-bold text-base">
-                                                    ₹{lowestPrice}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        {loadingSimilar && (
-                            <div className="text-center py-8">
-                                <div className="w-8 h-8 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mx-auto"></div>
-                            </div>
-                        )}
-                    </div>
-                )}
 
                 {/* Reviews Section */}
                 <div className="mb-8 mt-6">
@@ -886,7 +824,99 @@ const ProductPage = () => {
                     />
                 </div>
 
+                {/* Similar Products Section */}
+                {similarProducts.length > 0 && (
+                    <div className="mt-12">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                                <Layers3 className="w-6 h-6 text-orange-500" />
+                                Similar Products
+                            </h2>
+                        </div>
 
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {similarProducts.map((prod) => {
+                                const lowestPrice = prod.variants && prod.variants.length > 0
+                                    ? Math.min(...prod.variants.map(v => Number(v.sp)))
+                                    : 0;
+                                const highestMRP = prod.variants && prod.variants.length > 0
+                                    ? Math.max(...prod.variants.filter(v => v.mrp).map(v => Number(v.mrp)))
+                                    : 0;
+                                const discount = highestMRP > lowestPrice
+                                    ? Math.round(((highestMRP - lowestPrice) / highestMRP) * 100)
+                                    : 0;
+
+                                return (
+                                    <div
+                                        key={prod.id}
+                                        onClick={() => router.push(`/products/${prod.id}`)}
+                                        className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                                    >
+                                        <div className="relative aspect-square overflow-hidden bg-gray-50">
+                                            <Image
+                                                src={prod.image_url || imgPlaceholder.src}
+                                                alt={prod.name}
+                                                fill
+                                                className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                            {/* {discount > 0 && (
+                                                <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                                    {discount}% OFF
+                                                </div>
+                                            )} */}
+                                        </div>
+                                        <div className="p-3">
+                                            <h3 className="font-medium text-sm text-gray-800 line-clamp-2 mb-2 group-hover:text-orange-600 transition-colors min-h-[40px]">
+                                                {prod.name}
+                                            </h3>
+
+                                            {/* Brand */}
+                                            {prod.brand && (
+                                                <p className="text-xs text-gray-500 mb-1">{prod.brand.name}</p>
+                                            )}
+
+                                            {/* Rating */}
+                                            {/* {prod.rating_summary && prod.rating_summary.total_reviews > 0 ? (
+                                                <div className="flex items-center gap-1 mb-2">
+                                                    <div className="flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-1.5 py-0.5 rounded">
+                                                        <span>{prod.rating_summary.average_rating.toFixed(1)}</span>
+                                                        <span>★</span>
+                                                    </div>
+                                                    <span className="text-xs text-gray-500">({prod.rating_summary.total_reviews.toLocaleString()})</span>
+                                                </div>
+                                            ) : (
+                                                <div className="h-5 mb-2"></div>
+                                            )} */}
+
+                                            {/* Price */}
+                                            <div className="flex items-baseline gap-2 flex-wrap">
+                                                <span className="text-orange-600 font-bold text-lg">
+                                                    ₹{lowestPrice.toLocaleString()}
+                                                </span>
+                                                {highestMRP > lowestPrice && (
+                                                    <span className="text-gray-400 text-sm line-through">
+                                                        ₹{highestMRP.toLocaleString()}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            {/* Category */}
+                                            {prod.category && (
+                                                <p className="text-xs text-gray-400 mt-1 truncate">{prod.category.name}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {loadingSimilar && (
+                            <div className="text-center py-8">
+                                <div className="w-8 h-8 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mx-auto"></div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import { ChevronDown, Plus, Filter } from 'lucide-react';
 import StarRating from '../ui/StarRating';
 import ReviewCard from './ReviewCard';
 import ReviewForm from './ReviewForm';
-import RatingSummary from './RatingSummary';
+// import RatingSummary from './RatingSummary';
 import Modal from '../(sheared)/Modal';
 import {
     Review,
@@ -210,19 +210,34 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
                 )}
             </div>
 
-            {/* Rating Summary and User Review Display */}
+            {/* Rating Summary and Review Form */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-1">
-                    <RatingSummary
+                    {/* <RatingSummary
                         summary={summary}
                         onRatingFilter={setRatingFilter}
                         selectedRating={ratingFilter}
-                    />
+                    /> */}
                 </div>
 
                 <div className="lg:col-span-2">
+                    {showReviewForm && (
+                        <ReviewForm
+                            productId={productId}
+                            initialData={editingReview ? {
+                                rating: editingReview.rating,
+                                title: editingReview.title || '',
+                                review_text: editingReview.review_text || ''
+                            } : undefined}
+                            isEditing={!!editingReview}
+                            onSubmit={handleFormSubmit}
+                            onCancel={handleCancelForm}
+                            loading={loading}
+                        />
+                    )}
+
                     {/* User's Review Display */}
-                    {userReview && (
+                    {userReview && !showReviewForm && (
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold text-gray-900 mb-3">Your Review</h3>
                             <ReviewCard
@@ -235,28 +250,6 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, onRatingUpda
                     )}
                 </div>
             </div>
-
-            {/* Review Form Modal */}
-            {showReviewForm && (
-                <Modal
-                    isOpen={showReviewForm}
-                    onClose={handleCancelForm}
-                    title={editingReview ? "Edit Your Review" : "Write a Review"}
-                >
-                    <ReviewForm
-                        productId={productId}
-                        initialData={editingReview ? {
-                            rating: editingReview.rating,
-                            title: editingReview.title || '',
-                            review_text: editingReview.review_text || ''
-                        } : undefined}
-                        isEditing={!!editingReview}
-                        onSubmit={handleFormSubmit}
-                        onCancel={handleCancelForm}
-                        loading={loading}
-                    />
-                </Modal>
-            )}
 
             {/* Reviews Section */}
             {summary.total_reviews > 0 && (
