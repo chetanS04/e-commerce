@@ -379,7 +379,7 @@ const ProductPage = () => {
     });
 
     return (
-        <div className="px-26 mx-auto py-10">
+        <div className="w-full max-w-[1536px] mx-auto px-7 sm:px-4 md:px-6 py-10">
             {/* Success Toast */}
             {showToast && toastMessage && (
                 <div className="fixed top-6 right-6 z-[9999] px-6 py-4 rounded-lg shadow-lg font-semibold transition-all bg-green-100 text-green-800 border border-green-200">
