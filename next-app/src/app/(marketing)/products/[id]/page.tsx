@@ -810,19 +810,6 @@ const ProductPage = () => {
                     </div>
                 )}
 
-                {/* Reviews Section */}
-                <div className="mb-8">
-                    <ProductReviews
-                        productId={product.id}
-                        onRatingUpdate={() => {
-                            // Trigger live rating update when reviews change with loading animation
-                            fetchLiveRatingSummary(true);
-                            // Dispatch custom event for other components
-                            window.dispatchEvent(new CustomEvent('reviewUpdated', { detail: { productId: product.id } }));
-                        }}
-                    />
-                </div>
-
                 {/* Similar Products Section */}
                 {similarProducts.length > 0 && (
                     <div className="mt-12">
@@ -832,7 +819,7 @@ const ProductPage = () => {
                                 Similar Products
                             </h2>
                         </div>
-                        
+
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                             {similarProducts.map((prod) => {
                                 const lowestPrice = prod.variants && prod.variants.length > 0
@@ -885,6 +872,21 @@ const ProductPage = () => {
                         )}
                     </div>
                 )}
+
+                {/* Reviews Section */}
+                <div className="mb-8 mt-6">
+                    <ProductReviews
+                        productId={product.id}
+                        onRatingUpdate={() => {
+                            // Trigger live rating update when reviews change with loading animation
+                            fetchLiveRatingSummary(true);
+                            // Dispatch custom event for other components
+                            window.dispatchEvent(new CustomEvent('reviewUpdated', { detail: { productId: product.id } }));
+                        }}
+                    />
+                </div>
+
+
             </div>
         </div>
     );
