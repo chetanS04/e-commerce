@@ -21,6 +21,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ThemesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\UserController;
 
 // ==========================================
 // PUBLIC ROUTES (No Authentication Required)
@@ -94,12 +95,22 @@ Route::post('/confirm-delivery/{token}', [OrderController::class, 'confirmDelive
 // PROTECTED ROUTES (Authentication Required)
 // ==========================================
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'check.user.status'])->group(function () {
 
     // ========== USER MANAGEMENT ==========
     Route::get('/user', [AuthController::class, 'me']);
     Route::get('/all_users', [AuthController::class, 'allUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    
+    // ========== ADMIN: USER MANAGEMENT ==========
+    Route::middleware('role:Admin')->group(function () {
+        Route::get('/admin/users', [UserController::class, 'index']);
+        Route::get('/admin/users/statistics', [UserController::class, 'getStatistics']);
+        Route::get('/admin/users/{id}', [UserController::class, 'show']);
+        Route::post('/admin/users/{id}/block', [UserController::class, 'blockUser']);
+        Route::post('/admin/users/{id}/unblock', [UserController::class, 'unblockUser']);
+        Route::post('/admin/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
+    });
 
     // ========== USER PROFILE ==========
     Route::get('/profile', [ProfileController::class, 'show']);
