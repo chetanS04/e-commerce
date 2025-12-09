@@ -91,6 +91,9 @@ Route::get('/themes', [ThemesController::class, 'index']);
 Route::get('/confirm-delivery/{token}', [OrderController::class, 'getOrderByToken']);
 Route::post('/confirm-delivery/{token}', [OrderController::class, 'confirmDelivery']);
 
+// Test Cashfree credentials (for debugging - remove in production)
+Route::get('/test-cashfree', [PaymentController::class, 'testCredentials']);
+
 // ==========================================
 // PROTECTED ROUTES (Authentication Required)
 // ==========================================
