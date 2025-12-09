@@ -98,7 +98,7 @@ export default function ContactUsPage() {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-gray-900 mb-1">Call Us</h3>
-                                        <p className="text-gray-600 text-sm">+91 95925 75105</p>
+                                        <p className="text-gray-600 text-sm">+91 9729310456</p>
                                         <p className="text-gray-500 text-xs mt-1">Mon-Sat: 9AM - 6PM</p>
                                     </div>
                                 </div>
@@ -232,7 +232,7 @@ export default function ContactUsPage() {
                                                 className={`w-full px-4 py-3 rounded-xl border ${
                                                     errors.phone_number ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-orange-500'
                                                 } focus:ring-2 focus:border-transparent transition-all`}
-                                                placeholder="+91 95925 75105"
+                                                placeholder="+91 9729310456"
                                                 required
                                             />
                                             {errors.phone_number && (

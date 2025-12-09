@@ -9,7 +9,6 @@ import Testimonials from "./Testimonials/page";
 import CategorySlider from "./categories/CategorySlider";
 import ProductSlider from "./products/ProductSlider";
 import PopularProductsSlider from "./Popular_Products/PopularProductsSlider";
-import Contact_Us from "./contact_us/page";
 import { fetchThemes } from "../../../utils/theme";
 type Themes = {
   id: number;
@@ -400,7 +399,6 @@ export default function HomeUI() {
       <ProductSlider />
       <PopularProductsSlider />
       <Testimonials />
-      <Contact_Us />
     </div>
   );
 }

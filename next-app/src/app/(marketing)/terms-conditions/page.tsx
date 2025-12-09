@@ -260,7 +260,7 @@ export default function TermsConditionsPage() {
                                     </p>
                                     <div className="space-y-1 text-sm text-gray-600">
                                         <p>Email: <a href="mailto:legal@zelton.co.in" className="text-orange-600 hover:underline">legal@zelton.co.in</a></p>
-                                        <p>Phone: +91 95925 75105</p>
+                                        <p>Phone: +91 9729310456</p>
                                     </div>
                                 </div>
                             </div>

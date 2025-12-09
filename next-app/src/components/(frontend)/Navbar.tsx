@@ -443,7 +443,7 @@ const Navbar = () => {
               )}
             </div>
 
-            <Link href="/contact_us" style={{
+            <Link href="/contact-us" style={{
               color: themes?.text_color || "#000", // fallback to black
             }} className="relative py-2 px-4 text-gray-700 font-medium hover:text-orange-600 transition-all duration-300 group">
               <span>Contact Us</span>
