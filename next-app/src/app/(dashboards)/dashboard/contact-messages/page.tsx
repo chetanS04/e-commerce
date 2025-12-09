@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Mail, Search, Trash2, Eye, X, Phone, Calendar, CheckCircle2, Loader2 } from 'lucide-react';
-import { deleteContactMessage , getContactMessages, markMessageAsRead, type ContactMessage} from '../../../../../utils/contactUsApi';
+import { deleteContactMessage, getContactMessages, markMessageAsRead, type ContactMessage } from '../../../../../utils/contactUsApi';
 
 export default function ContactMessagesPage() {
     const [messages, setMessages] = useState<ContactMessage[]>([]);
@@ -247,7 +247,7 @@ export default function ContactMessagesPage() {
                             </div>
 
                             <div>
-                                <label className="text-sm font-medium text-gray-500 mb-1 block flex items-center gap-2">
+                                <label className="text-sm font-medium text-gray-500 mb-1 flex items-center gap-2">
                                     <Mail className="w-4 h-4" />
                                     Email
                                 </label>
@@ -255,7 +255,7 @@ export default function ContactMessagesPage() {
                             </div>
 
                             <div>
-                                <label className="text-sm font-medium text-gray-500 mb-1 block flex items-center gap-2">
+                                <label className="text-sm font-medium text-gray-500 mb-1 flex items-center gap-2">
                                     <Phone className="w-4 h-4" />
                                     Phone Number
                                 </label>
@@ -263,7 +263,7 @@ export default function ContactMessagesPage() {
                             </div>
 
                             <div>
-                                <label className="text-sm font-medium text-gray-500 mb-1 block flex items-center gap-2">
+                                <label className="text-sm font-medium text-gray-500 mb-1 flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
                                     Received
                                 </label>
