@@ -1,8 +1,6 @@
 import axios from "./axios";
 import { ProductDetail } from "@/common/interface";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-
 export interface SimilarProductsResponse {
     products: ProductDetail[];
     pagination: {
@@ -20,7 +18,7 @@ export const getSimilarProducts = async (
     perPage: number = 10
 ): Promise<SimilarProductsResponse> => {
     try {
-        const response = await axios.get(`${apiUrl}/api/get-similar-products/${productId}`, {
+        const response = await axios.get(`/api/get-similar-products/${productId}`, {
             params: { page, per_page: perPage }
         });
         if (response.data.res === 'success') {
