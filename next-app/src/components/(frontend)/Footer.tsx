@@ -93,11 +93,6 @@ const Footer = () => {
 
                     <p className="text-slate-400 text-sm mt-10">Developed By @TopNTech</p>
                 </div>
-                <br />
-                <hr className='bg-white/50 ' />
-                <p className='text-slate-400 text-center pt-10 text-sm capitalize ' >
-                    ALL RIGHT RESERVED WITH TOPNTECH TECHNOLOGY PRIVATE LIMITED
-                </p>
             </footer>
         </>
     )
