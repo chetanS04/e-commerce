@@ -7,7 +7,7 @@ export default function AboutUsPage() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 via-orange-50/30 to-white">
             {/* Hero Section */}
-            <section className="relative container rounded-2xl mt-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white py-20 overflow-hidden">
+            <section className="relative bg-gradient-to-r from-orange-500 to-yellow-500 text-white py-20 overflow-hidden">
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center">

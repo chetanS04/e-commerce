@@ -153,7 +153,7 @@ export default function BrandDetailPage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50/20 to-white">
             {/* Hero Header with Background */}
-            <div className="container mt-4 rounded-2xl relative bg-gradient-to-r from-orange-500 to-yellow-400 text-white">
+            <div className="relative bg-gradient-to-r from-orange-500 to-yellow-400 text-white">
                 <div className="container mx-auto px-4 py-10 md:py-14 relative z-10">
 
                     {/* Back Button */}
