@@ -65,6 +65,7 @@ Route::get('/get-subcategory/{subcategory}', [SubCategoryController::class, 'sho
 // Public brand routes (for filtering)
 Route::get('/brands', [BrandController::class, 'index']);
 Route::get('/brands/{brand}', [BrandController::class, 'show']);
+Route::get('/brands/{brand}/products', [BrandController::class, 'getProducts']);
 Route::get('/get-brand/{brand}', [BrandController::class, 'show']);
 
 // Public attribute routes (for product filtering)

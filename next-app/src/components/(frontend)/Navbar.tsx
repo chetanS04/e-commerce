@@ -534,7 +534,7 @@ const Navbar = () => {
               )}
             </div>
 
-            <Link href="/about_us" style={{
+            <Link href="/about-us" style={{
               color: themes?.text_color || "#000", // fallback to black
             }} className="relative py-2 px-4 text-gray-700 font-medium hover:text-orange-600 transition-all duration-300 group">
               <span>About Us</span>

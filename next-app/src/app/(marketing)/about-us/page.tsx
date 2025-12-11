@@ -6,7 +6,7 @@ export default function AboutUsPage() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-r from-orange-500 to-yellow-500 text-white py-20 overflow-hidden">
+            <section className="relative container rounded-2xl mt-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white py-20 overflow-hidden">
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4xIi8+PC9nPjwvc3ZnPg==')] opacity-20"></div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -34,8 +34,8 @@ export default function AboutUsPage() {
                                 <h2 className="text-2xl font-bold text-gray-900">Our Mission</h2>
                             </div>
                             <p className="text-gray-600 leading-relaxed">
-                                To revolutionize online shopping by providing an exceptional platform that connects customers 
-                                with high-quality products, backed by outstanding customer service and innovative technology. 
+                                To revolutionize online shopping by providing an exceptional platform that connects customers
+                                with high-quality products, backed by outstanding customer service and innovative technology.
                                 We strive to make every shopping experience seamless, enjoyable, and memorable.
                             </p>
                         </div>
@@ -48,8 +48,8 @@ export default function AboutUsPage() {
                                 <h2 className="text-2xl font-bold text-gray-900">Our Vision</h2>
                             </div>
                             <p className="text-gray-600 leading-relaxed">
-                                To become the leading e-commerce platform recognized for trust, innovation, and customer 
-                                satisfaction. We envision a future where online shopping is not just convenient but also 
+                                To become the leading e-commerce platform recognized for trust, innovation, and customer
+                                satisfaction. We envision a future where online shopping is not just convenient but also
                                 personalized, sustainable, and accessible to everyone.
                             </p>
                         </div>
@@ -58,7 +58,7 @@ export default function AboutUsPage() {
             </section>
 
             {/* Stats Section */}
-            <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-orange-500 to-yellow-500">
+            <section className="py-16 container rounded-2xl px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-orange-500 to-yellow-500">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {[
@@ -145,23 +145,33 @@ export default function AboutUsPage() {
 
             {/* Our Story */}
             <section className="py-16 px-4 sm:px-6 lg:px-8 bg-orange-50">
-                <div className="max-w-4xl mx-auto">
-                    <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-                        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 text-center">Our Story</h2>
-                        <div className="prose prose-lg max-w-none text-gray-600">
-                            <p className="mb-4">
-                                Founded with a passion for bringing quality products to customers worldwide, Zelton has grown 
-                                from a small startup to a trusted e-commerce platform serving thousands of happy customers.
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex flex-col md:flex-row items-center gap-12">
+                        <div className="md:w-1/2">
+                            <h2 className="text-3xl font-bold text-dark mb-6">Our Story</h2>
+                            <p className="text-gray-700 mb-4">
+                                SynthMind AI was founded in 2019 with a radical idea: that
+                                artificial intelligence should enhance human decision-making rather
+                                than replace it. Our team of neuroscientists and machine learning
+                                experts set out to create a new paradigm in AI.
                             </p>
-                            <p className="mb-4">
-                                Our journey began with a simple idea: create an online shopping experience that combines 
-                                convenience, quality, and trust. Today, we're proud to offer a vast selection of products 
-                                across multiple categories, all carefully curated to meet your needs.
+                            <p className="text-gray-700 mb-4">
+                                Today, we're recognized as pioneers in cognitive computing, with our
+                                technology powering some of the world's most innovative companies
+                                across healthcare, finance, and creative industries.
                             </p>
-                            <p>
-                                As we continue to grow, our commitment remains the same – to provide exceptional service, 
-                                quality products, and an unforgettable shopping experience to every customer, every time.
+                            <p className="text-gray-700">
+                                Our name reflects our philosophy - we synthesize human-like
+                                understanding with machine precision to create truly intelligent
+                                systems.
                             </p>
+                        </div>
+                        <div className="md:w-1/2">
+                            <img
+                                src="https://images.unsplash.com/photo-1629904853893-c2c8981a1dc5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+                                alt="AI Neural Network Visualization"
+                                className="rounded-lg shadow-xl w-full h-auto"
+                            />
                         </div>
                     </div>
                 </div>
