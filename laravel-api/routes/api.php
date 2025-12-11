@@ -24,6 +24,7 @@ use App\Http\Controllers\ThemesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DelhiveryController;
 
 // ==========================================
 // PUBLIC ROUTES (No Authentication Required)
@@ -140,7 +141,17 @@ Route::middleware(['auth:sanctum', 'check.user.status'])->group(function () {
         Route::get('/images/get-files/{directory}', [ImageController::class, 'getFiles']);
         Route::post('/images/upload', [ImageController::class, 'upload']);
         Route::delete('/images', [ImageController::class, 'delete']);
+
+        // Delhivery Management
+        Route::post('/delhivery/orders/{orderId}/create-shipment', [DelhiveryController::class, 'createShipment']);
+        Route::post('/delhivery/orders/{orderId}/cancel-shipment', [DelhiveryController::class, 'cancelShipment']);
+        Route::get('/delhivery/orders/{orderId}/sync-tracking', [DelhiveryController::class, 'syncTracking']);
+        Route::get('/delhivery/warehouses', [DelhiveryController::class, 'getWarehouses']);
     });
+
+    // ========== DELHIVERY PUBLIC ENDPOINTS ==========
+    Route::post('/delhivery/check-serviceability', [DelhiveryController::class, 'checkServiceability']);
+    Route::post('/delhivery/track-waybill', [DelhiveryController::class, 'trackByWaybill']);
 
     // ========== USER PROFILE ==========
     Route::get('/profile', [ProfileController::class, 'show']);
@@ -228,6 +239,7 @@ Route::middleware(['auth:sanctum', 'check.user.status'])->group(function () {
     Route::post('/orders/place-single-item', [OrderController::class, 'placeSingleItemOrder']);
     Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancelOrder']);
     Route::get('/orders/{id}/tracking', [OrderController::class, 'getTracking']);
+    Route::get('/orders/{orderId}/delhivery-tracking', [DelhiveryController::class, 'trackByOrder']);
 
     // ========== USER: PAYMENT MANAGEMENT ==========
     Route::post('/payment/initiate', [PaymentController::class, 'initiatePayment']);

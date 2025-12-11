@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Search, Eye, Edit, Truck, CheckCircle, Clock, X, Package, Download, Calendar } from "lucide-react";
+import { Search, Eye, Edit, Truck, CheckCircle, Clock, X, Package, Download, Calendar, Send } from "lucide-react";
 import imgPlaceholder from "@/public/imagePlaceholder.png";
 import axios from "../../../../../utils/axios";
 import Modal from "@/components/(sheared)/Modal";
 import OrderTimelineModal from "@/components/OrderTimelineModal";
+import CreateShipmentModal from "@/components/CreateShipmentModal";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -75,6 +76,9 @@ type Order = {
     created_at: string;
     delivered_at: string | null;
     delivery_confirmed_at: string | null;
+    delhivery_waybill?: string | null;
+    delhivery_status?: string | null;
+    courier_name?: string | null;
     user: User;
     order_items: OrderItem[];
     tracking_records: TrackingRecord[];
@@ -115,6 +119,9 @@ const OrdersPage = () => {
     const [showCompletedOrderModal, setShowCompletedOrderModal] = useState(false);
     const [completedOrderDetails, setCompletedOrderDetails] = useState<any>(null);
     const [loadingOrderDetails, setLoadingOrderDetails] = useState(false);
+    const [showCreateShipment, setShowCreateShipment] = useState(false);
+    const [shipmentOrderId, setShipmentOrderId] = useState<number | null>(null);
+    const [shipmentOrderNumber, setShipmentOrderNumber] = useState<string>('');
 
     const {
         register,
@@ -655,6 +662,30 @@ const OrdersPage = () => {
                                                             <Edit className="w-4 h-4" />
                                                             <span className="text-xs">Update Status</span>
                                                         </button>
+                                                        {!order.delhivery_waybill && ['confirmed', 'processing'].includes(order.status) && (
+                                                            <button
+                                                                onClick={() => {
+                                                                    setShipmentOrderId(order.id);
+                                                                    setShipmentOrderNumber(order.order_number);
+                                                                    setShowCreateShipment(true);
+                                                                }}
+                                                                className="inline-flex items-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 font-semibold rounded-lg shadow-sm border border-purple-200 hover:bg-purple-600 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2"
+                                                                title="Create Delhivery Shipment"
+                                                            >
+                                                                <Send className="w-4 h-4" />
+                                                                <span className="text-xs">Create Shipment</span>
+                                                            </button>
+                                                        )}
+                                                        {order.delhivery_waybill && (
+                                                            <a
+                                                                href={`/dashboard/orders/${order.id}/track`}
+                                                                className="inline-flex items-center gap-2 px-3 py-2 bg-orange-50 text-orange-700 font-semibold rounded-lg shadow-sm border border-orange-200 hover:bg-orange-600 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
+                                                                title="Track Delhivery Shipment"
+                                                            >
+                                                                <Truck className="w-4 h-4" />
+                                                                <span className="text-xs">Track</span>
+                                                            </a>
+                                                        )}
                                                     </>
                                                 )}
                                             </div>
@@ -955,6 +986,25 @@ const OrdersPage = () => {
                     </div>
                 </form>
             </Modal>
+
+            {/* Create Delhivery Shipment Modal */}
+            {shipmentOrderId && (
+                <CreateShipmentModal
+                    isOpen={showCreateShipment}
+                    onClose={() => {
+                        setShowCreateShipment(false);
+                        setShipmentOrderId(null);
+                        setShipmentOrderNumber('');
+                    }}
+                    orderId={shipmentOrderId}
+                    orderNumber={shipmentOrderNumber}
+                    onSuccess={() => {
+                        fetchOrders();
+                        fetchOrderStats();
+                        showToastMessage('Shipment created successfully!', 'success');
+                    }}
+                />
+            )}
 
             {/* Completed Order Timeline Modal */}
             <OrderTimelineModal

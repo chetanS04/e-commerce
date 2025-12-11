@@ -32,6 +32,12 @@ class Order extends Model
         'delivery_confirmation_token',
         'delivery_confirmed_at',
         'delivery_confirmation_sent_at',
+        'delhivery_waybill',
+        'delhivery_status',
+        'delhivery_status_updated_at',
+        'delhivery_tracking_data',
+        'courier_name',
+        'delivery_instructions',
     ];
 
     protected $casts = [
@@ -43,6 +49,8 @@ class Order extends Model
         'delivered_at' => 'datetime',
         'delivery_confirmed_at' => 'datetime',
         'delivery_confirmation_sent_at' => 'datetime',
+        'delhivery_status_updated_at' => 'datetime',
+        'delhivery_tracking_data' => 'array',
     ];
 
     public function user(): BelongsTo
