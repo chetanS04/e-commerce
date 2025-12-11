@@ -94,6 +94,9 @@ Route::get('/themes', [ThemesController::class, 'index']);
 Route::get('/confirm-delivery/{token}', [OrderController::class, 'getOrderByToken']);
 Route::post('/confirm-delivery/{token}', [OrderController::class, 'confirmDelivery']);
 
+// Delhivery Webhook (public - called by Delhivery servers)
+Route::post('/delhivery/webhook', [\App\Http\Controllers\DelhiveryWebhookController::class, 'handleWebhook']);
+
 // Test Cashfree credentials (for debugging - remove in production)
 Route::get('/test-cashfree', [PaymentController::class, 'testCredentials']);
 
@@ -132,10 +135,11 @@ Route::middleware(['auth:sanctum', 'check.user.status'])->group(function () {
 
         // Order Management
         Route::get('/admin/orders', [OrderController::class, 'adminIndex']);
-        Route::patch('/admin/orders/{id}/status', [OrderController::class, 'adminUpdateStatus']);
         Route::get('/admin/orders/stats', [OrderController::class, 'getOrderStats']);
         Route::get('/admin/orders/completed', [OrderController::class, 'getCompletedOrders']);
         Route::get('/admin/orders/completed/{id}', [OrderController::class, 'getCompletedOrderDetails']);
+        Route::get('/admin/orders/{id}', [OrderController::class, 'adminShow']);
+        Route::patch('/admin/orders/{id}/status', [OrderController::class, 'adminUpdateStatus']);
 
         // Image Management
         Route::get('/images/get-files/{directory}', [ImageController::class, 'getFiles']);

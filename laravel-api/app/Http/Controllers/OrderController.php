@@ -367,6 +367,25 @@ class OrderController extends Controller
         }
     }
 
+    public function adminShow($id)
+    {
+        try {
+            $order = Order::with(['orderItems.product', 'orderItems.variant', 'trackingRecords', 'user'])
+                ->findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'order' => $order,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Order not found',
+                'error' => $e->getMessage(),
+            ], 404);
+        }
+    }
+
     public function adminUpdateStatus(Request $request, $id)
     {
         $request->validate([

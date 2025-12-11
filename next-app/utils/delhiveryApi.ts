@@ -80,14 +80,16 @@ export const getDelhiveryWarehouses = async () => {
 // Types
 export type DelhiveryTrackingData = {
   waybill: string;
-  current_status: string;
-  last_location: string;
-  last_updated: string;
-  expected_delivery_date?: string;
-  scan_history: {
-    status: string;
+  status: string;
+  status_code: string;
+  status_date: string;
+  current_location: string;
+  expected_delivery?: string;
+  scans: {
+    scan_date: string;
+    scan_type: string;
+    scan_detail: string;
     location: string;
-    datetime: string;
     instructions?: string;
   }[];
 };

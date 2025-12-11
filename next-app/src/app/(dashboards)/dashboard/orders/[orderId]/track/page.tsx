@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Package, Loader2, RefreshCw, AlertCircle, Copy, Check } from 'lucide-react';
 import TrackingTimeline from '@/components/TrackingTimeline';
-import { getOrder } from '../../../../../../../utils/orderApi';
+import { getAdminOrder } from '../../../../../../../utils/orderApi';
 import { trackOrderDelhivery, syncDelhiveryTracking, DelhiveryTrackingData } from '../../../../../../../utils/delhiveryApi';
 
 const TrackOrderPage = () => {
@@ -25,7 +25,7 @@ const TrackOrderPage = () => {
       setError(null);
 
       // Fetch order details
-      const orderResponse = await getOrder(Number(orderId));
+      const orderResponse = await getAdminOrder(Number(orderId));
       setOrderInfo(orderResponse.order);
 
       // Fetch tracking data

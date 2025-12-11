@@ -109,6 +109,16 @@ export const getAdminOrders = async (params?: {
   }
 };
 
+export const getAdminOrder = async (orderId: number) => {
+  try {
+    const response = await axios.get(`/api/admin/orders/${orderId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching admin order:', error);
+    throw error;
+  }
+};
+
 export const updateOrderStatus = async (orderId: number, statusData: {
   status: string;
   description: string;

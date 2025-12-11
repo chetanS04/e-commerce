@@ -25,23 +25,53 @@ class DelhiveryController extends Controller
             $order = Order::with('user', 'orderItems')->findOrFail($orderId);
 
             // Parse shipping address (it's stored as plain text with newlines)
-            $addressLines = explode("\n", $order->shipping_address);
+            $addressLines = array_filter(array_map('trim', explode("\n", $order->shipping_address)));
+            $addressLines = array_values($addressLines); // Re-index array
+            
             $customerName = $addressLines[0] ?? $order->user->name;
-            $phone = $addressLines[1] ?? $order->user->phone_number;
+            $phone = preg_replace('/[^0-9]/', '', $addressLines[1] ?? $order->user->phone_number);
             
-            // Extract pincode from last address line (format: "City, State Pincode")
-            $lastLine = end($addressLines);
-            preg_match('/(\d{6})/', $lastLine, $pincodeMatch);
-            $pincode = $pincodeMatch[1] ?? '';
+            // Find the line with pincode (6 digits)
+            $pincode = '';
+            $city = '';
+            $state = '';
+            $addressParts = [];
             
-            // Extract city and state
-            preg_match('/([^,]+),\s*([^\d]+)/', $lastLine, $locationMatch);
-            $city = trim($locationMatch[1] ?? '');
-            $state = trim($locationMatch[2] ?? '');
+            foreach ($addressLines as $index => $line) {
+                // Skip name and phone lines
+                if ($index <= 1) continue;
+                
+                // Check if this line contains pincode
+                if (preg_match('/(\d{6})/', $line, $pincodeMatch)) {
+                    $pincode = $pincodeMatch[1];
+                    
+                    // Extract city and state from this line
+                    // Format: "City, State Pincode" or "Ambala, Haryana 140417"
+                    if (preg_match('/([^,\d]+),\s*([^,\d]+)/', $line, $locationMatch)) {
+                        $city = trim($locationMatch[1]);
+                        $state = trim($locationMatch[2]);
+                    }
+                } else {
+                    // This is part of the address
+                    $addressParts[] = $line;
+                }
+            }
             
-            // Build full address (middle lines)
-            $addressParts = array_slice($addressLines, 2, -1);
             $fullAddress = implode(', ', $addressParts);
+
+            // Validate required fields
+            if (empty($pincode) || empty($city) || empty($state)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid shipping address format. Missing pincode, city, or state.',
+                    'debug' => [
+                        'pincode' => $pincode,
+                        'city' => $city,
+                        'state' => $state,
+                        'raw_address' => $order->shipping_address
+                    ]
+                ], 400);
+            }
 
             // Prepare order data for Delhivery
             $orderData = [
@@ -65,13 +95,14 @@ class DelhiveryController extends Controller
 
             $result = $this->delhiveryService->createShipment($orderData);
 
-            if ($result['success']) {
+            if ($result['success'] && !empty($result['waybill'])) {
                 // Update order with waybill
                 $order->update([
                     'delhivery_waybill' => $result['waybill'],
                     'delhivery_status' => 'Shipped',
                     'delhivery_status_updated_at' => now(),
-                    'status' => 'shipped'
+                    'status' => 'shipped',
+                    'courier_name' => 'Delhivery'
                 ]);
 
                 // Add tracking record
@@ -85,10 +116,12 @@ class DelhiveryController extends Controller
                 ]);
             }
 
+            // If waybill is null, return error
             return response()->json([
                 'success' => false,
-                'message' => $result['message'],
-                'error' => $result['error'] ?? null
+                'message' => $result['message'] ?? 'Delhivery account verification required. Please contact Delhivery support.',
+                'error' => $result['error'] ?? 'Your Delhivery account needs to be verified before creating shipments. Contact: nilanshu.singh@delhivery.com',
+                'details' => 'Error Code: ER0005 - Suspicious order/consignee. Your pickup location is active but API access needs approval.'
             ], 400);
 
         } catch (\Exception $e) {

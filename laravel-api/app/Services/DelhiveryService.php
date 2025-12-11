@@ -36,9 +36,9 @@ class DelhiveryService
             ]);
             
             $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
+                'Content-Type' => 'application/x-www-form-urlencoded',
                 'Authorization' => 'Token ' . $this->apiKey,
-            ])->post($this->baseUrl . '/cmu/create.json', [
+            ])->asForm()->post($this->baseUrl . '/cmu/create.json', [
                 'format' => 'json',
                 'data' => json_encode($shipmentData)
             ]);
@@ -49,13 +49,45 @@ class DelhiveryService
                 Log::info('Delhivery API Response', [
                     'order_id' => $orderData['order_id'],
                     'status_code' => $response->status(),
-                    'full_response' => $data,
-                    'waybill' => $data['waybill'] ?? null
+                    'full_response' => $data
                 ]);
+
+                // Check if packages array exists and has waybill
+                $waybill = null;
+                $errorMessage = null;
+                
+                if (isset($data['packages']) && is_array($data['packages']) && count($data['packages']) > 0) {
+                    $package = $data['packages'][0];
+                    $waybill = $package['waybill'] ?? null;
+                    
+                    // Check for errors
+                    if (isset($package['status']) && $package['status'] === 'Fail') {
+                        $errorMessage = isset($package['remarks']) && is_array($package['remarks']) 
+                            ? implode(', ', $package['remarks']) 
+                            : 'Shipment creation failed';
+                        
+                        Log::error('Delhivery shipment failed', [
+                            'error_code' => $package['err_code'] ?? 'Unknown',
+                            'remarks' => $package['remarks'] ?? [],
+                            'waybill' => $waybill
+                        ]);
+                    }
+                }
+
+                // If waybill is null or empty, it's a failure
+                if (empty($waybill)) {
+                    return [
+                        'success' => false,
+                        'waybill' => null,
+                        'message' => $errorMessage ?? 'Delhivery account verification required',
+                        'error' => $errorMessage ?? 'Your Delhivery account needs API access approval. Contact: nilanshu.singh@delhivery.com',
+                        'data' => $data
+                    ];
+                }
 
                 return [
                     'success' => true,
-                    'waybill' => $data['waybill'] ?? null,
+                    'waybill' => $waybill,
                     'message' => 'Shipment created successfully',
                     'data' => $data
                 ];
@@ -98,7 +130,8 @@ class DelhiveryService
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Token ' . $this->apiKey,
             ])->get($this->baseUrl . '/v1/packages/json/', [
-                'waybill' => $waybill
+                'waybill' => $waybill,
+                'verbose' => 1
             ]);
 
             if ($response->successful()) {
@@ -216,13 +249,17 @@ class DelhiveryService
     protected function formatShipmentData(array $orderData)
     {
         // Get warehouse/return address from config or use defaults
+        $pickupLocation = env('DELHIVERY_PICKUP_LOCATION', 'Zelton');
         $returnAddress = env('DELHIVERY_RETURN_ADDRESS', 'Warehouse Address');
-        $returnCity = env('DELHIVERY_RETURN_CITY', 'Mumbai');
-        $returnState = env('DELHIVERY_RETURN_STATE', 'Maharashtra');
-        $returnPin = env('DELHIVERY_RETURN_PIN', '400001');
-        $returnPhone = env('DELHIVERY_RETURN_PHONE', '9999999999');
+        $returnCity = env('DELHIVERY_RETURN_CITY', 'Ambala');
+        $returnState = env('DELHIVERY_RETURN_STATE', 'Haryana');
+        $returnPin = env('DELHIVERY_RETURN_PIN', '134003');
+        $returnPhone = env('DELHIVERY_RETURN_PHONE', '9729310456');
 
         return [
+            'pickup_location' => [
+                'name' => $pickupLocation,
+            ],
             'shipments' => [[
                 'name' => $orderData['customer_name'],
                 'add' => $orderData['address'],
@@ -271,23 +308,25 @@ class DelhiveryService
             return [];
         }
 
-        $shipment = $data['ShipmentData'][0] ?? [];
+        $shipmentData = $data['ShipmentData'][0] ?? [];
+        $shipment = $shipmentData['Shipment'] ?? [];
         $scans = $shipment['Scans'] ?? [];
 
         return [
-            'waybill' => $shipment['Waybill'] ?? '',
+            'waybill' => $shipment['AWB'] ?? '',
             'status' => $shipment['Status']['Status'] ?? 'Unknown',
             'status_code' => $shipment['Status']['StatusCode'] ?? '',
             'status_date' => $shipment['Status']['StatusDateTime'] ?? '',
-            'expected_delivery' => $shipment['ExpectedDeliveryDate'] ?? '',
-            'current_location' => $shipment['Status']['Instructions'] ?? '',
+            'expected_delivery' => $shipment['PromisedDeliveryDate'] ?? '',
+            'current_location' => $shipment['Status']['StatusLocation'] ?? '',
             'scans' => collect($scans)->map(function ($scan) {
+                $scanDetail = $scan['ScanDetail'] ?? [];
                 return [
-                    'scan_date' => $scan['ScanDateTime'] ?? '',
-                    'scan_type' => $scan['ScanType'] ?? '',
-                    'scan_detail' => $scan['Scan'] ?? '',
-                    'location' => $scan['ScannedLocation'] ?? '',
-                    'instructions' => $scan['Instructions'] ?? ''
+                    'scan_date' => $scanDetail['ScanDateTime'] ?? '',
+                    'scan_type' => $scanDetail['ScanType'] ?? '',
+                    'scan_detail' => $scanDetail['Scan'] ?? '',
+                    'location' => $scanDetail['ScannedLocation'] ?? '',
+                    'instructions' => $scanDetail['Instructions'] ?? ''
                 ];
             })->toArray()
         ];

@@ -15,18 +15,6 @@ import { getCompletedOrders, getCompletedOrderDetails } from "../../../../../uti
 
 const basePath = process.env.NEXT_PUBLIC_UPLOAD_BASE || "https://api.zelton.co.in";
 
-const statusUpdateSchema = yup.object().shape({
-    status: yup.string().required("Status is required"),
-    description: yup.string().required("Description is required").min(10, "Description must be at least 10 characters"),
-    location: yup.string().required("Location is required").min(3, "Location must be at least 3 characters"),
-});
-
-type StatusUpdateForm = {
-    status: string;
-    description: string;
-    location: string;
-};
-
 type OrderItem = {
     id: number;
     quantity: number;
@@ -111,7 +99,6 @@ const OrdersPage = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [showOrderDetails, setShowOrderDetails] = useState(false);
-    const [showUpdateStatus, setShowUpdateStatus] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [toastType, setToastType] = useState<"success" | "error" | null>(null);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -122,22 +109,6 @@ const OrdersPage = () => {
     const [showCreateShipment, setShowCreateShipment] = useState(false);
     const [shipmentOrderId, setShipmentOrderId] = useState<number | null>(null);
     const [shipmentOrderNumber, setShipmentOrderNumber] = useState<string>('');
-
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-        setValue,
-        watch
-    } = useForm<StatusUpdateForm>({
-        resolver: yupResolver(statusUpdateSchema),
-        defaultValues: {
-            status: '',
-            description: '',
-            location: ''
-        }
-    });
 
     useEffect(() => {
         if (activeTab === 'all') {
@@ -281,42 +252,26 @@ const OrdersPage = () => {
         }
     };
 
-    const handleUpdateStatus = async (data: StatusUpdateForm) => {
-        if (!selectedOrder) {
-            showToastMessage('No order selected', 'error');
-            return;
-        }
-
-        const statusOptions = getStatusOptions();
-        const currentStatusIndex = statusOptions.findIndex(s => s.value === selectedOrder.status);
-        const newStatusIndex = statusOptions.findIndex(s => s.value === data.status);
-
-        if (newStatusIndex <= currentStatusIndex) {
-            showToastMessage('Cannot move to the current or a previous status', 'error');
-            return;
-        }
-
-        if (newStatusIndex > currentStatusIndex + 1) {
-            showToastMessage('Cannot skip status levels. Please update to the next status only.', 'error');
-            return;
-        }
-
+    const handleConfirmOrder = async (orderId: number) => {
         try {
-            const response = await axios.patch(`/api/admin/orders/${selectedOrder.id}/status`, data);
+            const response = await axios.patch(`/api/admin/orders/${orderId}/status`, {
+                status: 'confirmed',
+                description: 'Order confirmed by admin',
+                location: 'Warehouse'
+            });
 
             if (response.data.success) {
-                setShowUpdateStatus(false);
-                setSelectedOrder(null);
-                reset();
+                showToastMessage('Order confirmed successfully', 'success');
                 fetchOrders();
                 fetchOrderStats();
-                showToastMessage('Order status updated successfully', 'success');
             }
         } catch (error: any) {
-            console.error('Error updating order status:', error);
-            showToastMessage(error.response?.data?.message || 'Failed to update order status', 'error');
+            console.error('Error confirming order:', error);
+            showToastMessage(error.response?.data?.message || 'Failed to confirm order', 'error');
         }
     };
+
+
 
     const getStatusIcon = (status: string) => {
         switch (status) {
@@ -642,26 +597,16 @@ const OrdersPage = () => {
                                                             <Eye className="w-4 h-4" />
                                                             <span className="text-xs">View Details</span>
                                                         </button>
-                                                        <button
-                                                            onClick={() => {
-                                                                setSelectedOrder(order);
-
-                                                                const allStatuses = ['pending', 'confirmed', 'processing', 'shipped', 'delivered'];
-                                                                const currentIndex = allStatuses.indexOf(order.status);
-                                                                const nextStatus = currentIndex < allStatuses.length - 1
-                                                                    ? allStatuses[currentIndex + 1]
-                                                                    : order.status;
-
-                                                                setValue('status', nextStatus);
-                                                                setValue('description', '');
-                                                                setValue('location', '');
-                                                                setShowUpdateStatus(true);
-                                                            }}
-                                                            className="inline-flex items-center gap-2 px-3 py-2 bg-green-50 text-green-700 font-semibold rounded-lg shadow-sm border border-green-200 hover:bg-green-600 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
-                                                        >
-                                                            <Edit className="w-4 h-4" />
-                                                            <span className="text-xs">Update Status</span>
-                                                        </button>
+                                                        {order.status === 'pending' && (
+                                                            <button
+                                                                onClick={() => handleConfirmOrder(order.id)}
+                                                                className="inline-flex items-center gap-2 px-3 py-2 bg-green-50 text-green-700 font-semibold rounded-lg shadow-sm border border-green-200 hover:bg-green-600 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+                                                                title="Confirm this order"
+                                                            >
+                                                                <CheckCircle className="w-4 h-4" />
+                                                                <span className="text-xs">Confirm Order</span>
+                                                            </button>
+                                                        )}
                                                         {!order.delhivery_waybill && ['confirmed', 'processing'].includes(order.status) && (
                                                             <button
                                                                 onClick={() => {
@@ -841,151 +786,7 @@ const OrdersPage = () => {
                 )}
             </Modal>
 
-            {/* Update Status Modal */}
-            <Modal
-                isOpen={showUpdateStatus}
-                onClose={() => {
-                    setShowUpdateStatus(false);
-                    reset();
-                }}
-                title="Update Order Status"
-                width="max-w-2xl"
-            >
-                <form onSubmit={handleSubmit(handleUpdateStatus)} className="space-y-6">
-                    {/* Visual Status Selector */}
-                    <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-4">Select Status</label>
-                        <div className="relative bg-gray-50 rounded-lg p-4">
-                            {/* Progress Line Background */}
-                            <div className="absolute top-10 left-16 right-16 h-0.5 bg-gray-300 -translate-y-1/2 z-0"></div>
 
-                            {/* Progress Line Active */}
-                            <div
-                                className="absolute top-10 left-16 h-0.5 bg-green-500 -translate-y-1/2 z-0 transition-all duration-500"
-                                style={{
-                                    width: selectedOrder
-                                        ? `${Math.max(0, (getStatusOptions().findIndex(s => s.value === selectedOrder.status) / (getStatusOptions().length - 1)) * 100)}%`
-                                        : '0%'
-                                }}
-                            ></div>
-
-                            <div className="flex items-center justify-between relative z-10">
-                                {getStatusOptions().map((status, index) => {
-                                    const IconComponent = status.icon;
-                                    const isSelected = watch('status') === status.value;
-                                    const isCompleted = status.completed || false;
-                                    const isDisabled = status.disabled || false;
-
-                                    return (
-                                        <div key={status.value} className="flex flex-col items-center flex-1">
-                                            {/* Status Circle */}
-                                            <div className="relative">
-                                                <button
-                                                    type="button"
-                                                    disabled={isDisabled}
-                                                    onClick={() => !isDisabled && setValue('status', status.value)}
-                                                    title={
-                                                        isDisabled
-                                                            ? index < getStatusOptions().findIndex(s => s.value === selectedOrder?.status)
-                                                                ? "Status already completed - cannot select"
-                                                                : index === getStatusOptions().findIndex(s => s.value === selectedOrder?.status)
-                                                                    ? "Current status - cannot select"
-                                                                    : "Cannot skip status levels - update sequentially"
-                                                            : isSelected
-                                                                ? "Currently selected (next) status"
-                                                                : isCompleted
-                                                                    ? "Status already completed"
-                                                                    : "Available next status"
-                                                    }
-                                                    className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm ${isSelected
-                                                        ? 'bg-blue-500 text-white ring-4 ring-blue-200'
-                                                        : isCompleted
-                                                            ? 'bg-green-500 text-white cursor-not-allowed'
-                                                            : isDisabled
-                                                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                                                : 'bg-white border-2 border-gray-300 text-gray-400 hover:border-blue-300 hover:bg-blue-50'
-                                                        }`}
-                                                >
-                                                    <IconComponent className="w-6 h-6" />
-                                                </button>
-                                            </div>
-
-                                            {/* Status Label */}
-                                            <div className="mt-3 text-center">
-                                                <div className={`text-xs font-medium ${isSelected ? 'text-blue-600' :
-                                                    isCompleted ? 'text-green-600' :
-                                                        isDisabled ? 'text-gray-400' : 'text-gray-600'
-                                                    }`}>
-                                                    {status.label}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        {errors.status && (
-                            <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
-                        )}
-                        <input type="hidden" {...register('status')} />
-                    </div>
-
-                    {/* Description Field */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Description <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                            {...register('description')}
-                            placeholder="Enter detailed status update description..."
-                            className={`w-full text-gray-700 px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none ${errors.description ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
-                                }`}
-                            rows={4}
-                        />
-                        {errors.description && (
-                            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
-                        )}
-                    </div>
-
-                    {/* Location Field */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Location <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            {...register('location')}
-                            placeholder="Enter current location or facility..."
-                            className={`w-full text-gray-700 px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.location ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
-                                }`}
-                        />
-                        {errors.location && (
-                            <p className="mt-1 text-sm text-red-600">{errors.location.message}</p>
-                        )}
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex justify-end gap-3 pt-4 border-t">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setShowUpdateStatus(false);
-                                reset();
-                            }}
-                            className="px-6 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-                        >
-                            Update Status
-                        </button>
-                    </div>
-                </form>
-            </Modal>
 
             {/* Create Delhivery Shipment Modal */}
             {shipmentOrderId && (

@@ -61,7 +61,7 @@ const TrackingTimeline: React.FC<TrackingTimelineProps> = ({ trackingData }) => 
           <div className="flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full">
             <Truck className="w-5 h-5 text-blue-600" />
             <span className="text-sm font-semibold text-blue-600">
-              {trackingData.current_status}
+              {trackingData.status}
             </span>
           </div>
         </div>
@@ -72,21 +72,21 @@ const TrackingTimeline: React.FC<TrackingTimelineProps> = ({ trackingData }) => 
             <p className="text-xs text-gray-500 mb-1">Waybill Number</p>
             <p className="text-sm font-semibold text-gray-800">{trackingData.waybill}</p>
           </div>
-          {trackingData.last_location && (
+          {trackingData.current_location && (
             <div>
-              <p className="text-xs text-gray-500 mb-1">Last Location</p>
+              <p className="text-xs text-gray-500 mb-1">Current Location</p>
               <p className="text-sm font-semibold text-gray-800 flex items-center gap-1">
                 <MapPin className="w-4 h-4 text-gray-500" />
-                {trackingData.last_location}
+                {trackingData.current_location}
               </p>
             </div>
           )}
-          {trackingData.expected_delivery_date && (
+          {trackingData.expected_delivery && (
             <div>
               <p className="text-xs text-gray-500 mb-1">Expected Delivery</p>
               <p className="text-sm font-semibold text-gray-800 flex items-center gap-1">
                 <Clock className="w-4 h-4 text-gray-500" />
-                {formatDate(trackingData.expected_delivery_date)}
+                {formatDate(trackingData.expected_delivery)}
               </p>
             </div>
           )}
@@ -98,22 +98,22 @@ const TrackingTimeline: React.FC<TrackingTimelineProps> = ({ trackingData }) => 
         <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
         
         <div className="space-y-6">
-          {trackingData.scan_history && trackingData.scan_history.length > 0 ? (
-            trackingData.scan_history.map((scan, index) => (
+          {trackingData.scans && trackingData.scans.length > 0 ? (
+            trackingData.scans.map((scan, index) => (
               <div key={index} className="relative flex gap-4">
                 {/* Icon */}
-                <div className={`relative z-10 flex items-center justify-center w-12 h-12 rounded-full border-2 ${getStatusColor(scan.status)}`}>
-                  {getStatusIcon(scan.status)}
+                <div className={`relative z-10 flex items-center justify-center w-12 h-12 rounded-full border-2 ${getStatusColor(scan.scan_detail)}`}>
+                  {getStatusIcon(scan.scan_detail)}
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 pb-6">
                   <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-semibold text-gray-800">{scan.status}</h4>
+                      <h4 className="font-semibold text-gray-800">{scan.scan_detail}</h4>
                       <span className="text-xs text-gray-500 flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {formatDate(scan.datetime)}
+                        {formatDate(scan.scan_date)}
                       </span>
                     </div>
                     
@@ -143,10 +143,10 @@ const TrackingTimeline: React.FC<TrackingTimelineProps> = ({ trackingData }) => 
       </div>
 
       {/* Last Updated */}
-      {trackingData.last_updated && (
+      {trackingData.status_date && (
         <div className="mt-6 pt-4 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center">
-            Last updated: {formatDate(trackingData.last_updated)}
+            Last updated: {formatDate(trackingData.status_date)}
           </p>
         </div>
       )}
