@@ -68,10 +68,18 @@ export default function LoginPage() {
       setSuccessMessage("Login successful! Redirecting...");
       handleLoginSuccess(res.user, res.token);
     } catch (err) {
-      const error = err as AxiosError<{ message?: string }>;
+      const error = err as AxiosError<{ message?: string; email_not_verified?: boolean; email?: string }>;
       const errorMsg = error.response?.data?.message || "Login failed";
       setError(errorMsg);
       setErrorMessage(errorMsg);
+      
+      // If email not verified, redirect to verification page
+      if (error.response?.data?.email_not_verified && error.response?.data?.email) {
+        localStorage.setItem("verifyEmail", error.response.data.email);
+        setTimeout(() => {
+          router.push("/email-verify");
+        }, 2000);
+      }
     } finally {
       hideLoader();
     }

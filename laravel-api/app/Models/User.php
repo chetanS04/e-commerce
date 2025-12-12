@@ -26,15 +26,20 @@ class User extends Authenticatable
         'phone_number',
         'address',
         'profile_picture',
+        'otp',
+        'otp_expires_at',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'otp',
+        'otp_expires_at',
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'otp_expires_at' => 'datetime',
         'password' => 'hashed',
         'status' => 'boolean',
     ];

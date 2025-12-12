@@ -110,7 +110,6 @@ const ProfilePage = () => {
   const router = useRouter();
   const { showLoader, hideLoader } = useLoader();
   const [themes, setThemes] = useState<Themes | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);

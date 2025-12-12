@@ -18,10 +18,21 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import axios from "../../../../utils/axios";
 
 const schema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
+  name: Yup.string()
+    .required("Full name is required")
+    .min(3, "Name must be at least 3 characters")
+    .max(50, "Name must be less than 50 characters"),
+  email: Yup.string()
+    .email("Please enter a valid email address")
+    .required("Email is required"),
+  phone_number: Yup.string()
+    .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
+    .required("Phone number is required"),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
+    // .min(8, "Password must be at least 8 characters")
+    // .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    // .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    // .matches(/[0-9]/, "Password must contain at least one number")
     .required("Password is required"),
   password_confirmation: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
@@ -185,6 +196,20 @@ export default function Home() {
                 }`}
             />
             {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>}
+          </div>
+
+          {/* Phone Number */}
+          <div>
+            <label className="text-gray-700 font-medium mb-2 block">Phone Number</label>
+            <input
+              {...register("phone_number")}
+              type="tel"
+              placeholder="Enter your 10-digit phone number"
+              maxLength={10}
+              className={`w-full h-12 px-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-400 transition ${errors.phone_number ? "border-red-400" : "border-gray-300"
+                }`}
+            />
+            {errors.phone_number && <p className="text-sm text-red-500 mt-1">{errors.phone_number.message}</p>}
           </div>
 
           {/* Password */}

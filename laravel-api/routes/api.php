@@ -34,6 +34,8 @@ use App\Http\Controllers\DelhiveryController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-email-code', [AuthController::class, 'verify']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
+Route::post('/resend-otp', [AuthController::class, 'resendOTP']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/auth/google', [AuthController::class, 'googleLogin']);

@@ -13,7 +13,6 @@ export interface RegisterUser {
   email: string;
   password: string;
   password_confirmation: string;
-  username?: string;
   phone_number?: string;
 }
 

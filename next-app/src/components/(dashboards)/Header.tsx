@@ -34,81 +34,95 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
     };
 
     return (
-        <header className="sticky top-0 z-50  bg-white border-b rounded-2xl mx-3 mt-2 border-gray-200 shadow-sm">
-            <div className="flex items-center justify-between px-4 py-2">
-                {/* Left Section - Sidebar Toggle */}
+        <header className="sticky top-0 z-50 mx-3 mt-2 backdrop-blur-xl bg-white/80 border border-white/50 shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl">
+            <div className="flex items-center justify-between px-4 py-3">
+
+                {/* Left Section */}
                 <div className="flex items-center gap-4">
+                    {/* Sidebar Toggle */}
                     <button
                         onClick={onToggleSidebar}
-                        className="text-gray-600 hover:text-[#ff9903] hover:bg-gray-50 p-2 rounded-lg transition-all duration-200"
                         aria-label="Toggle Sidebar"
+                        className="p-2 rounded-xl text-gray-700 hover:bg-gray-100 hover:text-[#ff9903] transition-all duration-300"
                     >
                         <Menu className="w-6 h-6" />
                     </button>
 
-                    <h1 className="text-lg font-semibold text-gray-800 hidden sm:block">
-                        Zelton Admin Dashboard
-                    </h1>
+                    {/* Logo + Title */}
+                    <div>
+                        <h1 className="text-xl font-bold bg-gradient-to-r from-[#ff9903] to-[#ffbd4a] bg-clip-text text-transparent tracking-wide">
+                            Zelton Admin
+                        </h1>
+                        <p className="text-xs text-gray-500 -mt-1">Dashboard Panel</p>
+                    </div>
                 </div>
 
-                {/* Right Section - User Menu & Notifications */}
-                <div className="flex items-center gap-3">
+                {/* Right Section */}
+                <div className="flex items-center gap-4">
+
                     {/* Notifications */}
                     <button
-                        className="relative text-gray-600 hover:text-[#ff9903] hover:bg-gray-50 p-2 rounded-lg transition-all duration-200"
                         aria-label="Notifications"
+                        className="relative p-2 rounded-xl text-gray-700 hover:bg-gray-100 hover:text-[#ff9903] transition-all duration-300"
                     >
                         <Bell className="w-5 h-5" />
                         <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
 
-                    {/* User Menu */}
+                    {/* User Dropdown */}
                     <div className="relative" ref={modalRef}>
                         <button
                             onClick={() => setShowUserModal((prev) => !prev)}
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 transition-all duration-300"
                         >
-                            <div className="size-8 bg-[#ff9903] text-white rounded-full flex items-center justify-center text-sm font-bold">
+                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#ff9903] to-[#ffbd4a] text-white flex items-center justify-center font-semibold shadow-md">
                                 {user?.name?.charAt(0).toUpperCase() || "U"}
                             </div>
-                            <span className="text-sm font-medium text-gray-800 hidden md:block">
+
+                            <span className="hidden md:block text-sm font-medium text-gray-800">
                                 {user?.name || "User"}
                             </span>
                         </button>
 
+                        {/* Dropdown Menu */}
                         {showUserModal && (
-                            <div className="absolute right-0 top-12 bg-white border border-gray-100 shadow-xl rounded-xl w-56 overflow-hidden transition-all duration-200">
-                                <div className="px-4 py-3 border-b border-gray-100">
-                                    <p className="text-sm font-medium text-gray-900">{user?.name || "User"}</p>
+                            <div
+                                className="absolute right-0 top-14 w-60 bg-white shadow-xl border border-gray-100 rounded-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+
+                                {/* User Info */}
+                                <div className="px-4 py-3 bg-gray-50">
+                                    <p className="text-sm font-semibold text-gray-900">
+                                        {user?.name || "User"}
+                                    </p>
                                     <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
                                 </div>
 
+                                {/* Menu Links */}
                                 <div className="py-1">
                                     <Link
                                         href="/"
-                                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-[#fff8ef] hover:text-[#ff9903] transition-all duration-150"
                                         onClick={() => setShowUserModal(false)}
+                                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-[#fff5e6] hover:text-[#ff9903] transition-all"
                                     >
-                                        <Home className="w-4 h-4" />
-                                        Home
+                                        <Home className="w-4 h-4" /> Home
                                     </Link>
+
                                     <Link
                                         href="/profile"
-                                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-[#fff8ef] hover:text-[#ff9903] transition-all duration-150"
                                         onClick={() => setShowUserModal(false)}
+                                        className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-[#fff5e6] hover:text-[#ff9903] transition-all"
                                     >
-                                        <User className="w-4 h-4" />
-                                        Profile
+                                        <User className="w-4 h-4" /> Profile
                                     </Link>
                                 </div>
 
+                                {/* Logout */}
                                 <div className="border-t border-gray-100">
                                     <button
                                         onClick={handleLogout}
-                                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-all duration-150"
+                                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-all"
                                     >
-                                        <LogOut className="w-4 h-4" />
-                                        Logout
+                                        <LogOut className="w-4 h-4" /> Logout
                                     </button>
                                 </div>
                             </div>
@@ -117,5 +131,6 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
                 </div>
             </div>
         </header>
+
     );
 }
