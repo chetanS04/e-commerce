@@ -3,7 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "../../../../../utils/axios";
-import { CheckCircle, Package, Truck, XCircle, Clock, MapPin } from "lucide-react";
+import {
+    CheckCircle,
+    Package,
+    XCircle,
+    MapPin
+} from "lucide-react";
 import Modal from "@/components/(sheared)/Modal";
 
 type OrderItem = {

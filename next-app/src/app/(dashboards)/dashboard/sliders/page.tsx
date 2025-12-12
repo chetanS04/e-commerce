@@ -12,7 +12,14 @@ import { AxiosError } from "axios";
 import { Pencil, Trash2, GripVertical } from "lucide-react";
 import ProtectedRoute from "@/components/(sheared)/ProtectedRoute";
 import ImageCropperModal from "@/components/(frontend)/ImageCropperModal";
-import { createSlider, deleteSlider, fetchSliders, SliderPayload, updateSlider, updateSliderOrder } from "../../../../../utils/slider";
+import {
+    createSlider,
+    deleteSlider,
+    fetchSliders,
+    SliderPayload,
+    updateSlider,
+    updateSliderOrder
+} from "../../../../../utils/slider";
 import { Slider } from "@/common/interface";
 
 const basePath = process.env.NEXT_PUBLIC_UPLOAD_BASE || "https://api.zelton.co.in";
@@ -40,10 +47,8 @@ function SlidersManagement() {
     const [draggedItem, setDraggedItem] = useState<Slider | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const { showLoader, hideLoader } = useLoader();
-
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-
 
     const {
         register,

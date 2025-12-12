@@ -4,7 +4,16 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Package, Loader2, ShoppingBag, Heart, Award, CheckCircle, ChevronDown } from "lucide-react";
+import {
+    ArrowLeft,
+    Package,
+    Loader2,
+    ShoppingBag,
+    Heart,
+    Award,
+    CheckCircle,
+    ChevronDown
+} from "lucide-react";
 import { getBrandById } from "../../../../../utils/brand";
 import { Brand } from "@/common/interface";
 import { useLike } from "@/context/LikeContext";
@@ -36,7 +45,6 @@ export default function BrandDetailPage() {
     const router = useRouter();
     const brandId = params.id as string;
     const { likedProducts, toggleLike } = useLike();
-
     const [brand, setBrand] = useState<ExtendedBrand | null>(null);
     const [products, setProducts] = useState<BrandProduct[]>([]);
     const [loading, setLoading] = useState(true);

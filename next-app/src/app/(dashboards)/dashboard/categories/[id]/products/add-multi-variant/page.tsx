@@ -5,7 +5,13 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup.js";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import * as yup from "yup";
 import JoditEditor from "jodit-react";
-import { ApiResponse, Brand, Category, CategoryAttribute, Product } from "@/common/interface";
+import {
+    ApiResponse,
+    Brand,
+    Category,
+    CategoryAttribute,
+    Product
+} from "@/common/interface";
 import { useLoader } from "@/context/LoaderContext";
 import { useParams, useRouter } from "next/navigation";
 import { FaTimes } from "react-icons/fa";

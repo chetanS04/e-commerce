@@ -45,8 +45,6 @@ export default function CategoriesPage() {
         router.push(`/categories/subcategories/${category.id}`);
     };
 
-
-
     return (
         <section className="py-8 sm:py-12 md:py-16">
             <div className="container mx-auto px-3 sm:px-4 md:px-6">

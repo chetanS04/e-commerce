@@ -52,7 +52,6 @@ export default function ForgotPasswordPage() {
             setMessage(res.message);
             setSuccessMessage("Reset code sent successfully! Redirecting...");
 
-            // Save email to localStorage for reset password page
             localStorage.setItem("resetPasswordEmail", data.email);
 
             setTimeout(() => {
@@ -112,9 +111,8 @@ export default function ForgotPasswordPage() {
                                 {...register("email")}
                                 type="email"
                                 placeholder="Enter your email"
-                                className={`w-full h-12 pl-10 pr-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-400 transition ${
-                                    errors.email ? "border-red-400" : "border-gray-300"
-                                }`}
+                                className={`w-full h-12 pl-10 pr-4 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-400 transition ${errors.email ? "border-red-400" : "border-gray-300"
+                                    }`}
                             />
                         </div>
                         {errors.email && (

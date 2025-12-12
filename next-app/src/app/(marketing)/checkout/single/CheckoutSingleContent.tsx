@@ -98,10 +98,8 @@ const shippingSchema = yup.object({
 const CheckoutSingle = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-
     const { user, loading: authLoading } = useAuth();
     const { items, removeFromCart } = useCart();
-
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
@@ -109,17 +107,11 @@ const CheckoutSingle = () => {
     const [variant, setVariant] = useState<Variant | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [productLoading, setProductLoading] = useState(true);
-
-    // Payment Verification State
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState<'verifying' | 'success' | 'failed'>('verifying');
     const [paymentMessage, setPaymentMessage] = useState("Verifying payment...");
-
-    // Success Modal state
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [orderDetails, setOrderDetails] = useState<{ orderNumber: string; amount: number } | null>(null);
-
-    // Get parameters from URL
     const productId = searchParams.get('productId');
     const variantId = searchParams.get('variantId');
     const initialQuantity = parseInt(searchParams.get('quantity') || '1');
@@ -129,8 +121,6 @@ const CheckoutSingle = () => {
         register,
         handleSubmit,
         setValue,
-        watch,
-        reset,
         getValues,
         formState: { errors },
     } = useForm<ShippingFormData>({
@@ -148,7 +138,6 @@ const CheckoutSingle = () => {
     });
 
     useEffect(() => {
-        // Wait for auth to finish loading before making redirect decisions
         if (authLoading) return;
 
         if (!user) {
@@ -156,11 +145,10 @@ const CheckoutSingle = () => {
             return;
         }
 
-        // Check for payment return
         const orderId = searchParams.get("order_id");
         if (orderId) {
             verifyPayment(orderId);
-            return; // Skip product fetching if verifying payment
+            return;
         }
 
         setQuantity(initialQuantity);
@@ -186,9 +174,6 @@ const CheckoutSingle = () => {
                 setPaymentStatus('success');
                 setPaymentMessage("Payment successful! Redirecting to orders...");
 
-                // Remove product from cart if it was there (optional, but good practice)
-                // await removeProductFromCart(); 
-
                 setTimeout(() => {
                     router.push('/orders');
                 }, 3000);
@@ -197,7 +182,6 @@ const CheckoutSingle = () => {
                 setPaymentMessage("Payment failed or pending. Please try again.");
                 setTimeout(() => {
                     setShowPaymentModal(false);
-                    // Remove query params but keep product params if possible, or redirect to cart
                     router.replace('/cart');
                 }, 3000);
             }
@@ -212,7 +196,6 @@ const CheckoutSingle = () => {
         }
     };
 
-    // Update form data when user changes
     useEffect(() => {
         if (user) {
             setValue("fullName", user.name || "");
@@ -259,7 +242,6 @@ const CheckoutSingle = () => {
     };
 
     const removeProductFromCart = async () => {
-        // Find cart item that matches the current product and variant
         const cartItem = items.find(item =>
             item.product_id === product?.id && item.variant_id === variant?.id
         );
@@ -269,7 +251,6 @@ const CheckoutSingle = () => {
                 await removeFromCart(cartItem.id);
             } catch (error) {
                 console.error("Failed to remove product from cart:", error);
-                // Don't show error to user as order was successful
             }
         }
     };
@@ -323,10 +304,8 @@ const CheckoutSingle = () => {
             const response = await placeSingleItemOrder(orderData);
 
             if (response.success) {
-                // Remove the product from cart after successful order
                 await removeProductFromCart();
 
-                // Show success modal with order details
                 setOrderDetails({
                     orderNumber: response.data?.order_number || 'N/A',
                     amount: response.data?.total || finalTotal

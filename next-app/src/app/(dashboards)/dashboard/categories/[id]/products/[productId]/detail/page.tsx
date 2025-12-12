@@ -237,7 +237,7 @@ export default function ProductDetailPage() {
                                                     : "bg-red-100 text-red-700"
                                                     }`}
                                             >
-                                                {variant.status  ? "Active" : "Inactive"}
+                                                {variant.status ? "Active" : "Inactive"}
                                             </div>
                                         </div>
 

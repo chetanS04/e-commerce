@@ -8,11 +8,16 @@ import Modal from "@/components/(sheared)/Modal";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
 import SuccessMessage from "@/components/(sheared)/SuccessMessage";
 import { useLoader } from "@/context/LoaderContext";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { Pencil, Trash2 } from "lucide-react";
 import ProtectedRoute from "@/components/(sheared)/ProtectedRoute";
-import { createAttributeValue, deleteAttributeValue, fetchAttributeValues, updateAttributeValue } from "../../../../../../../utils/attributeValue";
+import {
+    createAttributeValue,
+    deleteAttributeValue,
+    fetchAttributeValues,
+    updateAttributeValue
+} from "../../../../../../../utils/attributeValue";
 import { AttributeValue } from "@/common/interface";
 
 const schema = yup.object({
@@ -320,7 +325,6 @@ export default function AttributeValuesManagement() {
                                 ></div>
                             </div>
                         </label>
-
 
                         {/* Divider */}
                         <hr className="border-black/10" />

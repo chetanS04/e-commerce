@@ -110,6 +110,8 @@ const OrdersPage = () => {
     const [shipmentOrderId, setShipmentOrderId] = useState<number | null>(null);
     const [shipmentOrderNumber, setShipmentOrderNumber] = useState<string>('');
     const { showLoader, hideLoader } = useLoader();
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         if (activeTab === 'all') {
@@ -144,32 +146,6 @@ const OrdersPage = () => {
         color: string;
         completed?: boolean;
         disabled?: boolean;
-    };
-
-    const getStatusOptions = (): StatusOption[] => {
-        const allStatuses: StatusOption[] = [
-            { value: 'pending', label: 'Order Placed', icon: Clock, color: 'text-yellow-500' },
-            { value: 'confirmed', label: 'Order Confirmed', icon: CheckCircle, color: 'text-blue-500' },
-            { value: 'processing', label: 'Order Processing', icon: Package, color: 'text-purple-500' },
-            { value: 'shipped', label: 'Order Shipped', icon: Truck, color: 'text-orange-500' },
-            { value: 'delivered', label: 'Order Delivered', icon: CheckCircle, color: 'text-green-500' },
-        ];
-
-        if (!selectedOrder) {
-            return allStatuses.map(status => ({
-                ...status,
-                completed: false,
-                disabled: false,
-            }));
-        }
-
-        const currentStatusIndex = allStatuses.findIndex(status => status.value === selectedOrder.status);
-
-        return allStatuses.map((status, index) => ({
-            ...status,
-            completed: index <= currentStatusIndex,
-            disabled: index <= currentStatusIndex || index > currentStatusIndex + 1,
-        }));
     };
 
     const fetchOrders = async () => {
@@ -569,10 +545,10 @@ const OrdersPage = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${order.payment_status === 'paid'
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : order.payment_status === 'failed'
-                                                        ? 'bg-red-100 text-red-800'
-                                                        : 'bg-yellow-100 text-yellow-800'
+                                                ? 'bg-green-100 text-green-800'
+                                                : order.payment_status === 'failed'
+                                                    ? 'bg-red-100 text-red-800'
+                                                    : 'bg-yellow-100 text-yellow-800'
                                                 }`}>
                                                 {order.payment_status.charAt(0).toUpperCase() + order.payment_status.slice(1)}
                                             </span>

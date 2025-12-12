@@ -21,7 +21,6 @@ export default function EmailVerifyPage() {
   const [isResending, setIsResending] = useState(false);
   const [resendCountdown, setResendCountdown] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
   const router = useRouter();
   const { user, loading, setUserDirectly } = useAuth();
   const { showLoader, hideLoader } = useLoader();
@@ -112,7 +111,6 @@ export default function EmailVerifyPage() {
       setSuccessMessage("Email verified successfully! Redirecting to home page...");
       localStorage.removeItem("verifyEmail");
 
-      // Auto-login with the token received
       if (response.data.token && response.data.user) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));

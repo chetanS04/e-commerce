@@ -3,7 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import axios from "../../../../../../utils/axios";
-import { ChevronLeft, ChevronRight, Search, Grid3X3 } from "lucide-react";
+import {
+    ChevronLeft,
+    ChevronRight,
+    Search,
+    Grid3X3
+} from "lucide-react";
 import ProductShow from "@/components/ProductShow";
 import Modal from "../../../../../components/(sheared)/Modal";
 
@@ -26,8 +31,6 @@ export default function SubCategoriesPage() {
     const [loading, setLoading] = useState(true);
     const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
-
-    // Dropdown states
     const [showModal, setShowModal] = useState(false);
     const [allSubcategories, setAllSubcategories] = useState<SubCategory[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -54,8 +57,6 @@ export default function SubCategoriesPage() {
                 const subs = res.data.subcategories || [];
                 setParentName(res.data.parent_category || "Essentials");
                 setSubcategories(subs);
-
-                // ✅ Automatically select first subcategory (if available)
                 if (subs.length > 0) {
                     setSelectedSubcategory(subs[0].id);
                 }

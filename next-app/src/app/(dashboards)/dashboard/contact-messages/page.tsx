@@ -1,8 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Mail, Search, Trash2, Eye, X, Phone, Calendar, CheckCircle2, Loader2 } from 'lucide-react';
-import { deleteContactMessage, getContactMessages, markMessageAsRead, type ContactMessage } from '../../../../../utils/contactUsApi';
+import {
+    Mail,
+    Search,
+    Trash2,
+    Eye,
+    Phone,
+    Calendar,
+    CheckCircle2,
+    Loader2
+} from 'lucide-react';
+import {
+    deleteContactMessage,
+    getContactMessages,
+    markMessageAsRead,
+    type ContactMessage
+} from '../../../../../utils/contactUsApi';
 import Modal from '@/components/(sheared)/Modal';
 import { useLoader } from '@/context/LoaderContext';
 import ErrorMessage from '@/components/(sheared)/ErrorMessage';
@@ -24,8 +38,6 @@ export default function ContactMessagesPage() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { showLoader, hideLoader } = useLoader();
 
-
-
     useEffect(() => {
         fetchMessages();
     }, [currentPage, searchTerm]);
@@ -44,16 +56,6 @@ export default function ContactMessagesPage() {
         }
     };
 
-    // const handleDelete = async (id: number) => {
-    //     if (!confirm('Are you sure you want to delete this message?')) return;
-
-    //     try {
-    //         await deleteContactMessage(id);
-    //         fetchMessages();
-    //     } catch (error) {
-    //         console.error('Failed to delete message:', error);
-    //     }
-    // };
     const confirmDelete = (message: ContactMessage) => {
         setMessageToDelete(message);
         setIsDeleteModalOpen(true);

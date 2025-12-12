@@ -5,7 +5,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, X } from "lucide-react";
+import {
+    Minus,
+    Plus,
+    Trash2,
+    ShoppingBag,
+    ArrowLeft,
+    X
+} from "lucide-react";
 import imgPlaceholder from "@/public/imagePlaceholder.png";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
 import SuccessMessage from "@/components/(sheared)/SuccessMessage";
@@ -32,12 +39,11 @@ const CartPage = () => {
     const { user, loading: authLoading } = useAuth();
     const { items, count, total, loading, updateQuantity, removeFromCart, clearCart } = useCart();
     const { showLoader, hideLoader } = useLoader();
-
-    // Modal states
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [showClearModal, setShowClearModal] = useState(false);
     const [itemToRemove, setItemToRemove] = useState<number | null>(null);
     const [itemToRemoveName, setItemToRemoveName] = useState<string>("");
+    
     useEffect(() => {
         loadTheme();
     }, []);

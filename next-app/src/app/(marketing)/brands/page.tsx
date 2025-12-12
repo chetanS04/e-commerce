@@ -11,7 +11,6 @@ const basePath = process.env.NEXT_PUBLIC_UPLOAD_BASE || "https://api.zelton.co.i
 
 export default function BrandsPage() {
     const router = useRouter();
-
     const [brands, setBrands] = useState<Brand[]>([]);
     const [filteredBrands, setFilteredBrands] = useState<Brand[]>([]);
     const [loading, setLoading] = useState(true);

@@ -5,7 +5,13 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup.js";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import * as yup from "yup";
 import JoditEditor from "jodit-react";
-import { ApiResponse, Brand, Category, CategoryAttribute, Product } from "@/common/interface";
+import {
+    ApiResponse,
+    Brand,
+    Category,
+    CategoryAttribute,
+    Product
+} from "@/common/interface";
 import { useLoader } from "@/context/LoaderContext";
 import { useParams, useRouter } from "next/navigation";
 import { FaTimes } from "react-icons/fa";
@@ -619,7 +625,7 @@ function VariantProductForm() {
                                                 <input
                                                     {...register(`variants.${variantIndex}.mrp` as const)}
                                                     type="number"
-                                                    onWheel={disableScrollNumberInput}  
+                                                    onWheel={disableScrollNumberInput}
                                                     placeholder="MRP"
                                                     className="w-full px-3 py-2 rounded-lg bg-white text-black border border-gray-300 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
                                                 />
@@ -635,7 +641,7 @@ function VariantProductForm() {
                                                 <input
                                                     {...register(`variants.${variantIndex}.bp` as const)}
                                                     type="number"
-                                                    onWheel={disableScrollNumberInput}  
+                                                    onWheel={disableScrollNumberInput}
                                                     placeholder="BP"
                                                     className="w-full px-3 py-2 rounded-lg bg-white text-black border border-gray-300 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
                                                 />
@@ -651,7 +657,7 @@ function VariantProductForm() {
                                                 <input
                                                     {...register(`variants.${variantIndex}.sp` as const)}
                                                     type="number"
-                                                    onWheel={disableScrollNumberInput}  
+                                                    onWheel={disableScrollNumberInput}
                                                     placeholder="SP"
                                                     className="w-full px-3 py-2 rounded-lg bg-white text-black border border-gray-300 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition"
                                                 />

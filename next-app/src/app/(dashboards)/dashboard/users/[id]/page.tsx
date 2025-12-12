@@ -3,19 +3,40 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useLoader } from "@/context/LoaderContext";
-import { FaArrowLeft, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendar, FaShoppingBag, FaStar, FaHeart, FaDollarSign, FaBan, FaCheckCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {
+    FaArrowLeft,
+    FaEnvelope,
+    FaPhone,
+    FaMapMarkerAlt,
+    FaCalendar,
+    FaShoppingBag,
+    FaStar,
+    FaHeart,
+    FaDollarSign,
+    FaBan,
+    FaCheckCircle,
+    FaChevronDown,
+    FaChevronUp
+} from "react-icons/fa";
 import Image from "next/image";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
 import SuccessMessage from "@/components/(sheared)/SuccessMessage";
 import Modal from "@/components/(sheared)/Modal";
-import { getUserDetails, toggleUserStatus, User, UserStats, UserOrder, UserReview, LikedProduct } from "../../../../../../utils/userApi";
+import {
+    getUserDetails,
+    toggleUserStatus,
+    User,
+    UserStats,
+    UserOrder,
+    UserReview,
+    LikedProduct
+} from "../../../../../../utils/userApi";
 
 export default function UserDetailPage() {
     const params = useParams();
     const router = useRouter();
     const { showLoader, hideLoader } = useLoader();
     const userId = params?.id as string;
-
     const [user, setUser] = useState<User | null>(null);
     const [stats, setStats] = useState<UserStats | null>(null);
     const [orders, setOrders] = useState<UserOrder[]>([]);

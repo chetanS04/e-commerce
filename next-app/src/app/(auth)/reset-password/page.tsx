@@ -35,7 +35,6 @@ interface ResetPasswordForm {
 export default function ResetPasswordPage() {
     const router = useRouter();
     const { showLoader, hideLoader } = useLoader();
-
     const [email, setEmail] = useState<string>("");
     const [code, setCode] = useState(["", "", "", "", "", ""]);
     const [showPassword, setShowPassword] = useState(false);
@@ -52,9 +51,6 @@ export default function ResetPasswordPage() {
     } = useForm<ResetPasswordForm>({
         resolver: yupResolver(schema),
     });
-
-    const password = watch("password");
-    const passwordConfirmation = watch("passwordConfirmation");
 
     useEffect(() => {
         const savedEmail = localStorage.getItem("resetPasswordEmail");
@@ -207,9 +203,8 @@ export default function ResetPasswordPage() {
                                     {...register("password")}
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Enter new password (min 8 characters)"
-                                    className={`w-full h-12 pl-10 pr-12 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-400 transition ${
-                                        errors.password ? "border-red-400" : "border-gray-300"
-                                    }`}
+                                    className={`w-full h-12 pl-10 pr-12 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-400 transition ${errors.password ? "border-red-400" : "border-gray-300"
+                                        }`}
                                 />
                                 <button
                                     type="button"
@@ -233,9 +228,8 @@ export default function ResetPasswordPage() {
                                     {...register("passwordConfirmation")}
                                     type={showConfirmPassword ? "text" : "password"}
                                     placeholder="Confirm new password"
-                                    className={`w-full h-12 pl-10 pr-12 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-400 transition ${
-                                        errors.passwordConfirmation ? "border-red-400" : "border-gray-300"
-                                    }`}
+                                    className={`w-full h-12 pl-10 pr-12 rounded-xl border focus:outline-none focus:ring-2 focus:ring-orange-400 transition ${errors.passwordConfirmation ? "border-red-400" : "border-gray-300"
+                                        }`}
                                 />
                                 <button
                                     type="button"

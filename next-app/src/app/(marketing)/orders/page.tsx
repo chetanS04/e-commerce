@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft, Package, Truck, CheckCircle, Clock, X, Search, Calendar, Filter, AlertTriangle } from "lucide-react";
 import imgPlaceholder from "@/public/imagePlaceholder.png";
 import { fetchThemes } from "../../../../utils/theme";
-import axios from "../../../../utils/axios";
+import { getOrders, cancelOrder } from "../../../../utils/orderApi";
 import Modal from "@/components/(sheared)/Modal";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
 import SuccessMessage from "@/components/(sheared)/SuccessMessage";
@@ -79,6 +79,7 @@ const OrdersPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [showOrderDetails, setShowOrderDetails] = useState(false);
     const [showFilters, setShowFilters] = useState(false);
@@ -109,25 +110,28 @@ const OrdersPage = () => {
     };
 
     const fetchOrders = async () => {
+        setLoading(true);
         showLoader();
         try {
-            const params = new URLSearchParams();
+            const params: any = {
+                page: currentPage,
+                per_page: 10
+            };
 
-            if (filter) params.append('status', filter);
-            if (searchTerm) params.append('search', searchTerm);
-            params.append('page', currentPage.toString());
-            params.append('per_page', '10');
+            if (filter) params.status = filter;
+            if (searchTerm) params.search = searchTerm;
 
-            const response = await axios.get(`/api/orders?${params.toString()}`);
+            const response = await getOrders(params);
 
-            if (response.data.success) {
-                setOrders(response.data.data.data);
-                setTotalPages(response.data.data.last_page);
+            if (response.success) {
+                setOrders(response.data.data);
+                setTotalPages(response.data.last_page);
             }
         } catch (error) {
             console.error('Error fetching orders:', error);
             setErrorMessage("Failed to load orders. Please try again.");
         } finally {
+            setLoading(false);
             hideLoader();
         }
     };
@@ -201,29 +205,22 @@ const OrdersPage = () => {
         setCancelLoading(true);
         showLoader();
         try {
-            const response = await axios.patch(`/api/orders/${orderToCancel.id}/cancel`);
-            if (response.data.success) {
+            const response = await cancelOrder(orderToCancel.id);
+            if (response.success) {
                 fetchOrders(); // Refresh orders
                 if (selectedOrder && selectedOrder.id === orderToCancel.id) {
-                    setSelectedOrder(response.data.data);
+                    setSelectedOrder(response.data);
                 }
                 setSuccessMessage(`Order #${orderToCancel.order_number} cancelled successfully!`);
                 setShowCancelModal(false);
                 setOrderToCancel(null);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error cancelling order:', error);
-            setErrorMessage("Failed to cancel order. Please try again.");
+            setErrorMessage(error.response?.data?.message || 'Failed to cancel order. Please try again.');
         } finally {
             setCancelLoading(false);
             hideLoader();
-        }
-    };
-        } catch (error: any) {
-            console.error('Error cancelling order:', error);
-            alert(error.response?.data?.message || 'Failed to cancel order');
-        } finally {
-            setCancelLoading(false);
         }
     };
 

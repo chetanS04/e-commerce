@@ -15,7 +15,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Modal from "@/components/(sheared)/Modal";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
-import SuccessMessage from "@/components/(sheared)/SuccessMessage";
 
 const basePath = process.env.NEXT_PUBLIC_UPLOAD_BASE || "https://api.zelton.co.in";
 
@@ -29,8 +28,6 @@ interface ShippingFormData {
     postalCode: string;
     country: string;
 }
-
-// Yup validation schema
 const shippingSchema = yup.object({
     fullName: yup
         .string()

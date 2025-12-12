@@ -12,7 +12,12 @@ import { Pencil, Trash2 } from "lucide-react";
 import ProtectedRoute from "@/components/(sheared)/ProtectedRoute";
 import { useRouter } from "next/navigation";
 import { TiInfoLargeOutline } from "react-icons/ti";
-import { createAttribute, deleteAttribute, fetchAttributes, updateAttribute } from "../../../../../utils/attribute";
+import {
+    createAttribute,
+    deleteAttribute,
+    fetchAttributes,
+    updateAttribute
+} from "../../../../../utils/attribute";
 import { Attribute } from "@/common/interface";
 
 const schema = yup.object({

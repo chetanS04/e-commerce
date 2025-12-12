@@ -2,12 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import ProtectedRoute from "@/components/(sheared)/ProtectedRoute";
-import { 
-  Users, ShoppingBag, Package, TrendingUp, TrendingDown, 
-  DollarSign, Clock, CheckCircle, Truck, XCircle, 
-  AlertTriangle, Mail, Loader2, Eye, Calendar 
+import {
+  Users,
+  ShoppingBag,
+  Package,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Clock,
+  CheckCircle,
+  Truck, XCircle,
+  AlertTriangle,
+  Mail,
+  Calendar
 } from 'lucide-react';
-import { DashboardStatistics, getDashboardStatistics } from '../../../../utils/dashboardApi';
+import {
+  DashboardStatistics,
+  getDashboardStatistics
+} from '../../../../utils/dashboardApi';
 import { useLoader } from '@/context/LoaderContext';
 
 export default function DashboardPage() {
@@ -375,7 +387,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-3">
-                      <div 
+                      <div
                         className="bg-gradient-to-r from-orange-500 to-yellow-500 h-3 rounded-full transition-all duration-500"
                         style={{ width: `${percentage}%` }}
                       ></div>

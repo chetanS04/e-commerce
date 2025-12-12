@@ -1,6 +1,19 @@
 'use client';
 
-import { Store, Users, ShieldCheck, Truck, Heart, Award, Target, Sparkles, Zap, TrendingUp, Globe, ArrowRight } from 'lucide-react';
+import {
+    Store,
+    Users,
+    ShieldCheck,
+    Truck,
+    Heart,
+    Award,
+    Target,
+    Sparkles,
+    Zap,
+    TrendingUp,
+    Globe,
+    ArrowRight
+} from 'lucide-react';
 import Link from 'next/link';
 
 export default function AboutUsPage() {

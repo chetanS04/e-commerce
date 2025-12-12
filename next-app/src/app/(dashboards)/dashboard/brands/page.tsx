@@ -11,7 +11,12 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup.js";
 import { FaArrowLeft } from "react-icons/fa";
 import JoditEditor from "jodit-react";
 import { Brand } from "@/common/interface";
-import { createBrand, deleteBrand, fetchBrands, updateBrand } from "../../../../../utils/brand";
+import {
+    createBrand,
+    deleteBrand,
+    fetchBrands,
+    updateBrand
+} from "../../../../../utils/brand";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
 import SuccessMessage from "@/components/(sheared)/SuccessMessage";
 import Modal from "@/components/(sheared)/Modal";

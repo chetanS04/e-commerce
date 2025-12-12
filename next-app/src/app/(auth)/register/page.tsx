@@ -16,6 +16,8 @@ import { registerUser } from "../../../../utils/auth";
 import { RegisterUser, User } from "@/common/interface";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import axios from "../../../../utils/axios";
+import ErrorMessage from "@/components/(sheared)/ErrorMessage";
+import SuccessMessage from "@/components/(sheared)/SuccessMessage";
 
 const schema = Yup.object().shape({
   name: Yup.string()
@@ -49,7 +51,6 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
   const {
     register,
     handleSubmit,
@@ -58,10 +59,9 @@ export default function Home() {
     resolver: yupResolver(schema),
   });
 
-
   useEffect(() => {
     if (!loading && user) {
-      router.replace("/"); // redirect to home
+      router.replace("/");
     }
   }, [user, loading, router]);
 
@@ -115,7 +115,7 @@ export default function Home() {
       if (response.data.token && response.data.user) {
         const loggedUser: User = response.data.user;
         const token = response.data.token;
-        
+
         localStorage.setItem("user", JSON.stringify(loggedUser));
         localStorage.setItem("token", token);
         setUserDirectly(loggedUser);
@@ -139,22 +139,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
       {/* Success & Error Messages */}
-      {successMessage && (
-        <div className="fixed top-5 z-50 bg-green-100 text-green-700 border border-green-300 rounded-xl px-6 py-3 shadow-lg">
-          {successMessage}
-          <button onClick={() => setSuccessMessage(null)} className="ml-3 text-green-700 font-bold">
-            ✕
-          </button>
-        </div>
-      )}
-      {errorMessage && (
-        <div className="fixed top-5 z-50 bg-red-100 text-red-700 border border-red-300 rounded-xl px-6 py-3 shadow-lg">
-          {errorMessage}
-          <button onClick={() => setErrorMessage(null)} className="ml-3 text-red-700 font-bold">
-            ✕
-          </button>
-        </div>
-      )}
+
+      {errorMessage && <ErrorMessage message={errorMessage} onClose={() => setErrorMessage(null)} />}
+      {successMessage && <SuccessMessage message={successMessage} onClose={() => setSuccessMessage(null)} />}
 
       {/* Main Card */}
       <div className="w-full max-w-lg bg-white rounded-3xl shadow-lg p-8 sm:p-10">

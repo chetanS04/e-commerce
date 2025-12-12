@@ -5,11 +5,21 @@ import React from "react";
 import { useLoader } from "@/context/LoaderContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FaArrowLeft, FaSearch, FaEye, FaBan, FaCheckCircle } from "react-icons/fa";
+import {
+    FaArrowLeft,
+    FaSearch,
+    FaEye,
+    FaBan,
+    FaCheckCircle
+} from "react-icons/fa";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
 import SuccessMessage from "@/components/(sheared)/SuccessMessage";
 import Modal from "@/components/(sheared)/Modal";
-import { getAllUsers, toggleUserStatus, User } from "../../../../../utils/userApi";
+import {
+    getAllUsers,
+    toggleUserStatus,
+    User
+} from "../../../../../utils/userApi";
 
 function Users() {
     const [users, setUsers] = useState<User[]>([]);
@@ -17,8 +27,6 @@ function Users() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { showLoader, hideLoader } = useLoader();
     const router = useRouter();
-    
-    // Pagination & Filters
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalUsers, setTotalUsers] = useState(0);
@@ -26,8 +34,6 @@ function Users() {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'blocked'>('all');
     const [loading, setLoading] = useState(false);
-
-    // Modal state
     const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
     const [userToToggle, setUserToToggle] = useState<User | null>(null);
 
@@ -49,7 +55,7 @@ function Users() {
                 sort_by: 'created_at',
                 sort_order: 'desc'
             });
-            
+
             setUsers(response.users.data);
             setCurrentPage(response.users.current_page);
             setTotalPages(response.users.last_page);
@@ -246,11 +252,10 @@ function Users() {
                                                         View
                                                     </button>
                                                     <button
-                                                        className={`px-3 py-1.5 text-sm rounded-lg transition flex items-center gap-1 ${
-                                                            user.status
-                                                                ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                                                                : 'bg-green-100 text-green-700 hover:bg-green-200'
-                                                        }`}
+                                                        className={`px-3 py-1.5 text-sm rounded-lg transition flex items-center gap-1 ${user.status
+                                                            ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                                                            : 'bg-green-100 text-green-700 hover:bg-green-200'
+                                                            }`}
                                                         onClick={() => handleToggleStatus(user)}
                                                     >
                                                         {user.status ? (
@@ -294,11 +299,11 @@ function Users() {
                         >
                             Previous
                         </button>
-                        
+
                         <span className="text-sm text-gray-600">
                             Page {currentPage} of {totalPages}
                         </span>
-                        
+
                         <button
                             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                             disabled={currentPage === totalPages || loading}
@@ -325,7 +330,7 @@ function Users() {
                         Are you sure you want to {userToToggle?.status ? 'block' : 'unblock'}{' '}
                         <span className="font-semibold">{userToToggle?.name}</span>?
                     </p>
-                    
+
                     {userToToggle?.status && (
                         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                             <p className="text-sm text-yellow-800">
@@ -351,11 +356,10 @@ function Users() {
                         </button>
                         <button
                             onClick={confirmToggleStatus}
-                            className={`px-4 py-2 rounded-lg transition text-white ${
-                                userToToggle?.status
-                                    ? 'bg-red-500 hover:bg-red-600'
-                                    : 'bg-green-500 hover:bg-green-600'
-                            }`}
+                            className={`px-4 py-2 rounded-lg transition text-white ${userToToggle?.status
+                                ? 'bg-red-500 hover:bg-red-600'
+                                : 'bg-green-500 hover:bg-green-600'
+                                }`}
                         >
                             {userToToggle?.status ? 'Block User' : 'Unblock User'}
                         </button>

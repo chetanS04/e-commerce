@@ -13,7 +13,7 @@ import Link from "next/link";
 import logo from "@/public/ZeltonHorizontalBlack.png";
 import Image from "next/image";
 import { Check, Eye, EyeOff, LogIn } from "lucide-react";
-import { User } from "@/common/interface"; // Use your shared User type
+import { User } from "@/common/interface";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import axios from "../../../../utils/axios";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
@@ -53,7 +53,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.replace("/"); // redirect if already logged in
+      router.replace("/");
     }
   }, [user, loading, router]);
 
@@ -71,7 +71,6 @@ export default function LoginPage() {
       setError(errorMsg);
       setErrorMessage(errorMsg);
 
-      // If email not verified, redirect to verification page
       if (error.response?.data?.email_not_verified && error.response?.data?.email) {
         localStorage.setItem("verifyEmail", error.response.data.email);
         setTimeout(() => {
