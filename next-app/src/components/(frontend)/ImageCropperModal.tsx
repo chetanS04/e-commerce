@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Cropper, { Area } from "react-easy-crop";
 import axios from "../../../utils/axios";
 import getCroppedImg from "../../../utils/cropImage";
@@ -164,19 +165,21 @@ export default function ImageCropperModal({
                 {buttonLabel}
             </button>
 
-            <Modal isOpen={isOpen} onClose={handleClose} title="Select Image" width="max-w-4xl">
-                {!selectedImage ? (
-                    <div className="space-y-4">
-                        <label className="btn btn-secondary mb-4 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md inline-block">
-                            Upload Image
-                            <input type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
-                        </label>
+            {typeof window !== 'undefined' && createPortal(
+                <>
+                    <Modal isOpen={isOpen} onClose={handleClose} title="Select Image" width="max-w-4xl" zIndex="z-[99999]">
+                        {!selectedImage ? (
+                            <div className="space-y-4">
+                                <label className="btn btn-secondary mb-4 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md inline-block">
+                                    Upload Image
+                                    <input type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
+                                </label>
 
-                        {images.length > 0 && (
-                            <div className="max-h-[290px] overflow-y-auto pr-2">
-                                <div className="grid grid-cols-4 gap-4">
-                                    {images.map((img, i) => (
-                                        <div key={i} className="relative group cursor-pointer">
+                                {images.length > 0 && (
+                                    <div className="max-h-[290px] overflow-y-auto pr-2">
+                                        <div className="grid grid-cols-4 gap-4">
+                                            {images.map((img, i) => (
+                                                <div key={i} className="relative group cursor-pointer">
                                             <img
                                                 src={`${uploadUrl}${img.url}`}
                                                 className="w-full h-28 object-cover border rounded-md"
@@ -263,6 +266,7 @@ export default function ImageCropperModal({
                 onClose={() => setIsDeleteModalOpen(false)}
                 title="Delete Image"
                 width="max-w-md"
+                zIndex="z-[99999]"
             >
                 <div className="text-center space-y-4">
                     <p className="text-gray-700">Are you sure you want to delete this image?</p>
@@ -284,6 +288,9 @@ export default function ImageCropperModal({
                     </div>
                 </div>
             </Modal>
+                </>,
+                document.body
+            )}
         </div>
     );
 }

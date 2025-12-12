@@ -7,6 +7,7 @@ interface ModalProps {
   title: string;
   children: React.ReactNode;
   width?: string; // e.g., 'max-w-xl', 'max-w-2xl'
+  zIndex?: string; // Allow custom z-index
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -15,13 +16,14 @@ const Modal: React.FC<ModalProps> = ({
   title,
   children,
   width = 'max-w-xl',
+  zIndex = 'z-[9999]',
 }) => {
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           key="backdrop"
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/20 backdrop-blur-sm overflow-y-auto py-10 px-4"
+          className={`fixed inset-0 ${zIndex} flex items-center justify-center bg-black/20 backdrop-blur-sm overflow-y-auto py-10 px-4`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
