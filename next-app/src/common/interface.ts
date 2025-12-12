@@ -8,6 +8,13 @@ export enum UserRole {
   USER = 2,
 }
 
+export interface ResetPasswordPayload {
+  email: string;
+  code: string;
+  password: string;
+  password_confirmation: string;
+};
+
 export interface RegisterUser {
   name: string;
   email: string;

@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getCart = async () => {
   try {
-    const response = await axios.get(`${API_URL}/api/cart`);
+    const response = await axios.get(`/api/cart`);
     return response.data;
   } catch (error) {
     console.error('Error fetching cart:', error);
@@ -14,7 +14,7 @@ export const getCart = async () => {
 
 export const addToCart = async (productId: number, variantId: number, quantity: number, selectedAttributes?: Record<string, string>) => {
   try {
-    const response = await axios.post(`${API_URL}/api/cart/add`, {
+    const response = await axios.post(`/api/cart/add`, {
       product_id: productId,
       variant_id: variantId,
       quantity,
@@ -29,7 +29,7 @@ export const addToCart = async (productId: number, variantId: number, quantity: 
 
 export const updateCartQuantity = async (cartItemId: number, quantity: number) => {
   try {
-    const response = await axios.put(`${API_URL}/api/cart/${cartItemId}`, {
+    const response = await axios.put(`/api/cart/${cartItemId}`, {
       quantity,
     });
     return response.data;
@@ -41,7 +41,7 @@ export const updateCartQuantity = async (cartItemId: number, quantity: number) =
 
 export const removeFromCart = async (cartItemId: number) => {
   try {
-    const response = await axios.delete(`${API_URL}/api/cart/${cartItemId}`);
+    const response = await axios.delete(`/api/cart/${cartItemId}`);
     return response.data;
   } catch (error) {
     console.error('Error removing from cart:', error);
@@ -51,7 +51,7 @@ export const removeFromCart = async (cartItemId: number) => {
 
 export const clearCart = async () => {
   try {
-    const response = await axios.delete(`${API_URL}/api/cart`);
+    const response = await axios.delete(`/api/cart`);
     return response.data;
   } catch (error) {
     console.error('Error clearing cart:', error);
@@ -61,7 +61,7 @@ export const clearCart = async () => {
 
 export const getCartCount = async () => {
   try {
-    const response = await axios.get(`${API_URL}/api/cart/count`);
+    const response = await axios.get(`/api/cart/count`);
     return response.data;
   } catch (error) {
     console.error('Error getting cart count:', error);

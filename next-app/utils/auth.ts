@@ -1,4 +1,4 @@
-import { RegisterUser } from "@/common/interface";
+import { RegisterUser, ResetPasswordPayload } from "@/common/interface";
 import axios from "./axios";
 
 export const verifyEmailCode = async (data: { email: string; code: string; }) => {
@@ -24,13 +24,6 @@ export const forgotPassword = async (email: string) => {
 export const logout = async () => {
   localStorage.removeItem("user");
   return axios.post("/api/logout");
-};
-
-export type ResetPasswordPayload = {
-  email: string;
-  code: string;
-  password: string;
-  password_confirmation: string;
 };
 
 export const resetPassword = async (data: ResetPasswordPayload) => {
