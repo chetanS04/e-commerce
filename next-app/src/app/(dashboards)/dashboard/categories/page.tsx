@@ -292,8 +292,19 @@ export default function CategoriesManagement() {
                           <span className="text-xs text-zinc-400 italic">No Image</span>
                         )}
                       </td>
-                      <td className="px-6 py-4">{category.link}</td>
-                      {/* Description Button */}
+                      <td className="px-4 py-4">
+                        {category.link ? (
+                          <a
+                            href={category.link}
+                            className="text-orange-600 hover:text-orange-700 underline truncate max-w-[160px] inline-block"
+                            title={category.link}
+                          >
+                            {category.link}
+                          </a>
+                        ) : (
+                          <span className="text-gray-400">No Link</span>
+                        )}
+                      </td>                      {/* Description Button */}
                       <td className="px-6 py-4">
                         <button
                           className="px-3 py-2 text-xs rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 font-semibold transition"
