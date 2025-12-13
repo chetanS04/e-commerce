@@ -238,14 +238,30 @@ function SlidersManagement() {
                 )}
 
                 {/* header */}
-                <div className="p-2 border border-gc-300/30 rounded-3xl shadow flex items-center justify-between mb-3">
-                    <h2 className="lg:text-2xl text-lg px-5 font-semibold text-gray-700">Sliders</h2>
-                    <button
-                        className="flex items-center px-10 py-3 bg-orange-400 hover:bg-orange-500 rounded-full font-semibold text-white transition"
-                        onClick={() => openModal(null)}
-                    >
-                        + Create Slider
-                    </button>
+                <div className="p-5 bg-white/70 backdrop-blur border border-gray-200 rounded-2xl shadow-lg mb-5">
+                    <div className="flex items-center justify-between">
+
+                        {/* Title */}
+                        <h2 className="lg:text-3xl text-xl font-bold px-5 text-gray-900 tracking-tight">
+                            Slider
+                        </h2>
+
+                        {/* Buttons */}
+                        <div className="flex gap-3">
+
+                            {/* Create Brand Button */}
+                            <button
+                                onClick={() => openModal(null)}
+                                className="flex items-center gap-2 px-5 py-3 
+                bg-gradient-to-r from-orange-400 to-yellow-400 
+                hover:from-orange-500 hover:to-yellow-500 
+                rounded-xl shadow-md text-white font-semibold
+                hover:shadow-lg transition-all duration-200"
+                            >
+                                + Create Slider
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Drag and Drop Info */}

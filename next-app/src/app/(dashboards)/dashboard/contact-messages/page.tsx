@@ -111,32 +111,71 @@ export default function ContactMessagesPage() {
             {errorMessage && <ErrorMessage message={errorMessage} onClose={() => setErrorMessage(null)} />}
             {successMessage && <SuccessMessage message={successMessage} onClose={() => setSuccessMessage(null)} />}
             {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Contact Messages</h1>
-                <p className="text-gray-600">Manage customer inquiries and support requests</p>
-            </div>
+            {/* Header + Search */}
+         <div className="p-5 bg-white/70 backdrop-blur border border-gray-200 rounded-2xl shadow-lg mb-6">
 
-            {/* Search Bar */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
-                <form onSubmit={handleSearch} className="flex gap-3">
-                    <div className="flex-1 relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                            type="text"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search by name, email, phone, or message..."
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium"
-                    >
-                        Search
-                    </button>
-                </form>
-            </div>
+  {/* Top Row */}
+  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+    {/* Title */}
+    <div className="px-5">
+      <h1 className="lg:text-3xl text-xl font-bold text-gray-900 tracking-tight">
+        Contact Messages
+      </h1>
+      <p className="text-sm text-gray-600 mt-1">
+        Manage customer inquiries and support requests
+      </p>
+    </div>
+
+    {/* Search Bar */}
+    <form
+      onSubmit={handleSearch}
+      className="
+        mt-4 lg:mt-0 px-5
+        flex flex-col sm:flex-row gap-3
+        w-full
+        lg:max-w-[650px]
+        xl:max-w-[800px]
+      "
+    >
+      {/* Input */}
+      <div className="relative flex-[3]">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by name, email, phone, or message..."
+          className="
+            w-full pl-11 pr-4 py-3
+            border border-gray-300 rounded-xl
+            focus:outline-none focus:ring-2 focus:ring-orange-400
+            transition
+          "
+        />
+      </div>
+
+      {/* Button */}
+      <button
+        type="submit"
+        className="
+          flex items-center justify-center gap-2
+          px-6 py-3
+          bg-gradient-to-r from-orange-400 to-yellow-400
+          hover:from-orange-500 hover:to-yellow-500
+          text-white font-semibold
+          rounded-xl shadow-md hover:shadow-lg
+          transition-all duration-200
+        "
+      >
+        Search
+      </button>
+    </form>
+
+  </div>
+</div>
+
+
 
             {/* Messages Table */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">

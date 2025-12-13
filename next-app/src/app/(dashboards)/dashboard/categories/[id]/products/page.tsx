@@ -121,61 +121,64 @@ export default function Products() {
                     </div>
                 </div>
 
-                <div className="p-4 border-t border-gray-100 sm:p-6">
-                    <div className="overflow-x-auto scrollbar rounded-2xl shadow border border-gray-300/30 bg-transparent">
+                <div className=" border-gray-100">
+                    <div className="overflow-x-auto scrollbar rounded-2xl shadow border border-gc-300/30 bg-transparent">
                         <table className="w-full min-w-[800px] text-sm text-left">
 
                             {/* Table Header */}
-                            <thead className="uppercase text-xs font-semibold text-gray-700 bg-white/40 backdrop-blur">
+                            <thead className="uppercase text-xs font-semibold text-gray-700">
                                 <tr>
                                     <th className="px-6 py-4">S.No.</th>
                                     <th className="px-6 py-4">Image</th>
                                     <th className="px-6 py-4">Name</th>
                                     <th className="px-6 py-4">Item Code</th>
                                     <th className="px-6 py-4">Description</th>
-                                    <th className="px-6 py-4">Actions</th>
                                     <th className="px-6 py-4">Status</th>
+                                    <th className="px-6 py-4 text-end">Actions</th>
                                 </tr>
                             </thead>
 
                             {/* Table Body */}
-                            <tbody className="divide-y divide-gray-300/30 text-gray-700">
+                            <tbody className="divide-y divide-gray-200 text-gray-700">
                                 {products.length ? (
                                     products.map((product, index) => (
                                         <tr
                                             key={product.id}
                                             className="bg-white/5 hover:bg-white/10 transition"
                                         >
+                                            {/* Index */}
                                             <td className="px-6 py-4">{index + 1}</td>
 
                                             {/* Image */}
                                             <td className="px-6 py-4">
-                                                <div className="flex items-center">
-                                                    <div className="w-12 h-12 rounded-xl overflow-hidden border border-gray-300/40 shadow-sm">
-                                                        <img
-                                                            src={
-                                                                product.image_url
-                                                                    ? `${basePath}${product.image_url}`
-                                                                    : "/placeholder.svg"
-                                                            }
-                                                            className="object-cover w-full h-full"
-                                                            alt={product.name}
-                                                        />
-                                                    </div>
-                                                </div>
+                                                {product.image_url ? (
+                                                    <img
+                                                        src={`${basePath}${product.image_url}`}
+                                                        alt={product.name}
+                                                        className="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm"
+                                                    />
+                                                ) : (
+                                                    <span className="text-xs text-zinc-400 italic">No Image</span>
+                                                )}
                                             </td>
 
                                             {/* Name */}
-                                            <td className="px-6 py-4 font-medium">{product.name}</td>
+                                            <td className="px-6 py-4 font-medium">
+                                                {product.name}
+                                            </td>
 
                                             {/* Item Code */}
-                                            <td className="px-6 py-4">{product.item_code}</td>
+                                            <td className="px-6 py-4">
+                                                {product.item_code}
+                                            </td>
 
-                                            {/* Description Button */}
+                                            {/* Description */}
                                             <td className="px-6 py-4">
                                                 <button
-                                                    className="px-3 py-2 text-xs rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 font-semibold transition"
                                                     onClick={() => openDescriptionModal(product)}
+                                                    className="px-3 py-2 text-xs rounded-md
+                  bg-blue-100 text-blue-700
+                  hover:bg-blue-200 font-semibold transition"
                                                 >
                                                     View Description
                                                 </button>
@@ -185,8 +188,8 @@ export default function Products() {
                                             <td className="px-6 py-4">
                                                 <span
                                                     className={`px-3 py-2 rounded-md text-xs font-medium ${product.status
-                                                        ? "bg-green-100 text-green-700"
-                                                        : "bg-red-100 text-red-700"
+                                                            ? "bg-green-100 text-green-700"
+                                                            : "bg-red-100 text-red-700"
                                                         }`}
                                                 >
                                                     {product.status ? "Active" : "Inactive"}
@@ -194,11 +197,12 @@ export default function Products() {
                                             </td>
 
                                             {/* Actions */}
-                                            <td className="px-6 py-4">
+                                            <td className="px-6 py-4 text-right flex gap-2 justify-end">
                                                 <button
                                                     title="View Product Details"
                                                     onClick={() => goToProductDetail(product)}
-                                                    className="size-10 bg-gc-300/30 hover:bg-orange-400 flex justify-center items-center rounded-full"
+                                                    className="size-10 bg-gc-300/30 hover:bg-orange-400 rounded-full
+                  flex items-center justify-center transition"
                                                 >
                                                     <TiInfoLargeOutline className="h-4 w-4" />
                                                 </button>
@@ -208,15 +212,13 @@ export default function Products() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td
-                                            colSpan={7}
-                                            className="text-center text-zinc-400 py-8 italic"
-                                        >
+                                        <td colSpan={7} className="text-center text-zinc-400 py-8 italic">
                                             No Products Found
                                         </td>
                                     </tr>
                                 )}
                             </tbody>
+
                         </table>
                     </div>
                 </div>
