@@ -204,7 +204,7 @@ export default function AttributesManagement() {
                                         <td className="px-6 py-4">{attr.description}</td>
                                         <td className="px-6 py-4">
                                             <span
-                                                className={`px-3 py-1 rounded-full text-xs font-medium ${attr.status
+                                                className={`px-3 py-2 rounded-md text-xs font-medium ${attr.status
                                                     ? "bg-green-100 text-green-700"
                                                     : "bg-red-100 text-red-700"
                                                     }`}

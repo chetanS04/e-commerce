@@ -284,6 +284,7 @@ export default function SubcategoriesManagement() {
                 <th className="px-6 py-4">Primary Image</th>
                 <th className="px-6 py-4">Secondary Image</th>
                 <th className="px-6 py-4">Link</th>
+                <th className="px-6 py-4">Description</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-end">Actions</th>
               </tr>
@@ -368,25 +369,28 @@ export default function SubcategoriesManagement() {
                         )}
                       </td>
                       <td className="px-6 py-4">{subcategory.link}</td>
+                      {/* Description Button */}
                       <td className="px-6 py-4">
-                        {subcategory.status ? (
-                          <span className="px-2 py-1 rounded bg-green-500 text-xs">
-                            Active
-                          </span>
-                        ) : (
-                          <span className="px-2 py-1 rounded bg-red-500 text-xs">
-                            Inactive
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-right flex gap-2 justify-end">
                         <button
-                          title="View Description"
-                          className="px-4 py-2 text-xs rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 font-semibold shadow transition"
+                          className="px-3 py-2 text-xs rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 font-semibold transition"
                           onClick={() => openDescriptionModal(subcategory)}
                         >
-                          Description
+                          View Description
                         </button>
+                      </td>
+
+                      {/* Status */}
+                      <td className="px-6 py-4">
+                        <span
+                          className={`px-3 py-2 rounded-md text-xs font-medium ${subcategory.status
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                            }`}
+                        >
+                          {subcategory.status ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right flex gap-2 justify-end">
                         <button
                           title="Edit Subcategory"
                           onClick={() => openModal(subcategory)}

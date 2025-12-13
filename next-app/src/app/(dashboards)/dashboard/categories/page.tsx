@@ -2,7 +2,7 @@
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useMemo, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, set } from "react-hook-form";
 import * as yup from "yup";
 import Modal from "@/components/(sheared)/Modal";
 import ErrorMessage from "@/components/(sheared)/ErrorMessage";
@@ -67,6 +67,8 @@ export default function CategoriesManagement() {
   const [previewSecondary, setPreviewSecondary] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
 
   const { showLoader, hideLoader } = useLoader();
   const router = useRouter();
@@ -182,6 +184,13 @@ export default function CategoriesManagement() {
     }
   };
 
+  const openDescriptionModal = (category: Category | null = null) => {
+    setSelectedCategory(category);
+    if (category) {
+      setIsDescriptionModalOpen(true);
+    }
+  };
+
   const onDetail = (category: Category) => {
     router.push(`categories/sub-categories/${category.id}`)
   }
@@ -233,10 +242,10 @@ export default function CategoriesManagement() {
               <tr>
                 <th className="px-6 py-4">S.No.</th>
                 <th className="px-6 py-4">Name</th>
-                <th className="px-6 py-4">Description</th>
                 <th className="px-6 py-4">Primary Image</th>
                 <th className="px-6 py-4">Secondary Image</th>
                 <th className="px-6 py-4">Link</th>
+                <th className="px-6 py-4">Description</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-end">Actions</th>
               </tr>
@@ -251,15 +260,10 @@ export default function CategoriesManagement() {
                   const secondary_image = category.secondary_image
                     ? `${basePath}${category.secondary_image.replace(/\\/g, "/")}`
                     : null;
-                  const plainDescription = category?.description
-                    ? category.description.replace(/<[^>]+>/g, "").slice(0, 80)
-                    : "No Description";
                   return (
                     <tr key={category.id} className="bg-white/5 hover:bg-white/10 transition">
                       <td className="px-6 py-4">{index + 1}</td>
                       <td className="px-6 py-4">{category.name}</td>
-                      <td className="px-6 py-4 max-w-10">{plainDescription}</td>
-
                       <td className="px-6 py-4">
                         {image ? (
                           <Image
@@ -289,16 +293,24 @@ export default function CategoriesManagement() {
                         )}
                       </td>
                       <td className="px-6 py-4">{category.link}</td>
+                      {/* Description Button */}
                       <td className="px-6 py-4">
-                        {category.status ? (
-                          <span className="px-2 py-1 rounded bg-green-500 text-xs">
-                            Active
-                          </span>
-                        ) : (
-                          <span className="px-2 py-1 rounded bg-red-500 text-xs">
-                            Inactive
-                          </span>
-                        )}
+                        <button
+                          className="px-3 py-2 text-xs rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 font-semibold transition"
+                          onClick={() => openDescriptionModal(category)}
+                        >
+                          View Description
+                        </button>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`px-3 py-2 rounded-md text-xs font-medium ${category.status
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                            }`}
+                        >
+                          {category.status ? "Active" : "Inactive"}
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-right flex gap-2 justify-end">
                         <button
@@ -537,6 +549,11 @@ export default function CategoriesManagement() {
               Delete
             </button>
           </div>
+        </Modal>
+
+        {/* Description Modal */}
+        <Modal isOpen={isDescriptionModalOpen} onClose={() => setIsDescriptionModalOpen(false)} width="max-w-4xl" title="Description">
+          <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: selectedCategory?.description || "<p>No Description</p>" }} />
         </Modal>
       </div>
     </ProtectedRoute>

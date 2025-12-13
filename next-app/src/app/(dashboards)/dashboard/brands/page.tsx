@@ -227,6 +227,7 @@ function AdminBrandManagement() {
                                 <th className="px-6 py-4">Section 1 Image</th>
                                 <th className="px-6 py-4">Section 2 Image</th>
                                 <th className="px-6 py-4">Section 3 Image</th>
+                                <th className="px-6 py-4">Description</th>
                                 <th className="px-6 py-4">Status</th>
                                 <th className="px-6 py-4">Actions</th>
                             </tr>
@@ -292,25 +293,27 @@ function AdminBrandManagement() {
                                                     <span className="text-xs text-zinc-400 italic">No Image</span>
                                                 )}
                                             </td>
+
+                                            {/* Description Button */}
                                             <td className="px-6 py-4">
-                                                {brand.status ? (
-                                                    <span className="px-2 py-1 rounded bg-green-500 text-xs">
-                                                        Active
-                                                    </span>
-                                                ) : (
-                                                    <span className="px-2 py-1 rounded bg-red-500 text-xs">
-                                                        Inactive
-                                                    </span>
-                                                )}
+                                                <button
+                                                    className="px-3 py-2 text-xs rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 font-semibold transition"
+                                                    onClick={() => openDescriptionModal(brand)}
+                                                >
+                                                    View Description
+                                                </button>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span
+                                                    className={`px-3 py-2 rounded-md text-xs font-medium ${brand.status
+                                                        ? "bg-green-100 text-green-700"
+                                                        : "bg-red-100 text-red-700"
+                                                        }`}
+                                                >
+                                                    {brand.status ? "Active" : "Inactive"}
+                                                </span>
                                             </td>
                                             <td className="px-6 py-4 flex gap-2">
-                                                <button
-                                                    title="View Description"
-                                                    onClick={() => openDescriptionModal(brand)}
-                                                    className="size-10 bg-gc-300/30 hover:bg-orange-400 flex justify-center items-center rounded-full"
-                                                >
-                                                    <TiInfoLargeOutline className="h-4 w-4" />
-                                                </button>
                                                 <button
                                                     title="Edit Brand"
                                                     onClick={() => openModal(brand)}
